@@ -10,10 +10,12 @@
 <body>
 	<c:if test="${empty sessionScope.sessionUtilisateur}">
 		<%@ include file="../components/headerUnconnect.jsp" %>
+		session empty
 	</c:if>
 	
 	<c:if test="${!empty sessionScope.sessionUtilisateur}">
 		<%@ include file="../components/hearderConnect.jsp" %>
+		session non empty
 	</c:if>
 	
 <p>ici une barre pour rechercher les parties d'un joueur ou une partie acec son id</p>

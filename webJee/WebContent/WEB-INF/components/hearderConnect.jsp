@@ -59,6 +59,6 @@
 <div class="header">
 	<h1 class="logo">Pacman</h1>
   <div class="header-right">
-    <a href="/webJee/signin">Logout</a>
+    <a href="/webJee/logout">Logout</a>
   </div>
 </div>
