@@ -4,12 +4,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
   version="3.0">
-  
-	<servlet>
-	    <servlet-name>Test</servlet-name>
-	    <servlet-class>com.sdzee.servlets.Test</servlet-class>
-	</servlet>
-	
+  	
 	<servlet>
 	    <servlet-name>Signin</servlet-name>
 	    <servlet-class>com.authentification.Signin</servlet-class>
@@ -29,10 +24,5 @@
 		<servlet-name>Login</servlet-name>
 		<url-pattern>/login</url-pattern>
 	</servlet-mapping>
-	
-	<servlet-mapping>
-		<servlet-name>Test</servlet-name>
-		<url-pattern>/test</url-pattern>
-	</servlet-mapping>
-	
+		
 </web-app>
