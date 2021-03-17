@@ -10,7 +10,7 @@
     <body>
         <form method="post" action="signin">
             <fieldset>
-                <legend>Connexion</legend>
+                <legend>Creation du compte</legend>
                 <p>Vous pouvez creer votre compte via ce formulaire.</p>
 
                 <label for="nom">Adresse email <span class="requis">*</span></label>
