@@ -8,11 +8,31 @@
 	<servlet>
 	    <servlet-name>Test</servlet-name>
 	    <servlet-class>com.sdzee.servlets.Test</servlet-class>
+	</servlet>
+	
+	<servlet>
+	    <servlet-name>Signin</servlet-name>
+	    <servlet-class>com.authentification.Signin</servlet-class>
+	</servlet>
+	
+	<servlet>
+	    <servlet-name>Login</servlet-name>
+	    <servlet-class>com.authentification.Login</servlet-class>
 	</servlet>	
 
 	<servlet-mapping>
+		<servlet-name>Signin</servlet-name>
+		<url-pattern>/signin</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>Login</servlet-name>
+		<url-pattern>/login</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
 		<servlet-name>Test</servlet-name>
-		<url-pattern>/toto</url-pattern>
+		<url-pattern>/test</url-pattern>
 	</servlet-mapping>
 	
 </web-app>
