@@ -7,9 +7,12 @@
 <title>SignIn</title>
 </head>
 <body>
+<%@ include file="../components/headerUnconnect.jsp" %>
 	<h1>Création du compte</h1>
 	<form action="/webJee/signin" method="post">
 		<table style="with: 50%">
+		
+		
 		
 			<tr><td>Username</td>
 			<td><input type="text" name="username" /></td></tr>
