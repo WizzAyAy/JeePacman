@@ -97,7 +97,6 @@
 	            	if(itplayers.hasNext()) out.println(" ,");
 	         	    j++;
 	            }
-	            out.println("</ul>");
 	            out.print("</td>");
 	            
 	    	    
