@@ -5,10 +5,10 @@
 <div class="header">
 	<a href="/webJee" class="logo">Pacman</a>
   <div class="header-right">
-	  <a href="/webJee/logout">Mes parties</a>
-	  <a href="/webJee/logout">Mes infos</a>
-	  <a href="/webJee/logout">Store</a>
-	  <a href="/webJee/logout">LeaderBoard</a>
+	  <a href="/webJee/mygame">Mes parties</a>
+	  <a href="/webJee/myinfo">Mes infos</a>
+	  <a href="/webJee/store">Store</a>
+	  <a href="/webJee/learderboard">LeaderBoard</a>
       <a href="/webJee/logout">Logout</a>
   </div>
 </div>
