@@ -28,7 +28,9 @@
 		                <td><p class="${empty form.erreurs ? 'succes' : 'erreur'}">${form.resultat}</p></td>
 					</tr>
                 </table>
-                 <input type="submit" value="Connexion" class="submit" />
+                 <input type="submit" value="Connexion" class="submit" /> <br/>
+                 <a href="/webJee/signin">Creér un compte</a><br/>
+                 <a href="/webJee/" class="annuler">Annuler</a>
             </fieldset>
         </form>
      </div>
