@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,6 +14,7 @@ import com.bean.User;
 import com.modele.ConnexionForm;
 import com.modele.CreationForm;
 
+@WebServlet( name="Signin", urlPatterns = "/signin" )
 public class Signin extends HttpServlet {
 	
 	public static final String ATT_USER         = "utilisateur";
