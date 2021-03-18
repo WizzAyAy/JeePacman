@@ -1,3 +1,6 @@
+# DROP DATABASE if need be
+# DROP DATABASE pacman;
+
 # Creation of the database
 
 CREATE DATABASE pacman DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
@@ -20,6 +23,7 @@ CREATE TABLE  pacman.Player (
  password VARCHAR( 64 ) NOT NULL ,
  pseudo VARCHAR( 20 ) NOT NULL ,
  PRIMARY KEY ( id ),
+ UNIQUE ( pseudo ),
  UNIQUE ( email )
 ) ENGINE = INNODB;
 
@@ -76,6 +80,3 @@ INSERT into GamePlayers (idGame, idPlayer) VALUES (1,1);
 INSERT into GamePlayers (idGame, idPlayer) VALUES (1,2);
 INSERT into GamePlayers (idGame, idPlayer) VALUES (2,1);
 INSERT into GamePlayers (idGame, idPlayer) VALUES (3,2);
-
-# DROP DATABASE if need be
-# DROP DATABASE pacman;
