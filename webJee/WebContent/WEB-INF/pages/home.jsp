@@ -7,6 +7,7 @@
 	<meta charset="UTF-8">
 	<title>Pacman</title>
 	<style type="text/css"><%@include file="../css/home.css" %></style>
+	<link rel="icon" type="image/png" href="../assets/favicon.ico" />
 </head>
 <body>
 
@@ -15,7 +16,7 @@
 	<table>
 	
 		<tr><td><h1 style="text-align:center">Bonjour jeune pandawan !</h1></td></tr>
-		<tr><td><h2 style="text-align:center">bienvenue sur Pacman, sur ce site vous allez pouvoir :</h2></td></tr>
+		<tr><td><h2 style="text-align:center">bienvenue sur Pacman, sur ce site vous allez pouvoir</h2></td></tr>
 		<tr><td>
 				<ul>
 					<li>Consulter vos anciennes parties | <i>Mes parties</i></li>

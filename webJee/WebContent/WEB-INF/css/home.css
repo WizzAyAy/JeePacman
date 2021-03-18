@@ -10,7 +10,7 @@
 ul {
   counter-reset: index;  
   padding: 0;
-  max-width: 900px;
+  max-width: 2000px;
 }
 
 h1,h2 {
