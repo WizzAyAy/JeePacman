@@ -1,9 +1,8 @@
-package com.endpoints.authentication;
+package com.endpoints.authentification;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
-import javax.servlet.*;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,14 +10,13 @@ import javax.servlet.http.HttpSession;
 
 import com.bean.User;
 import com.modele.ConnexionForm;
-import com.modele.CreationForm;
 
-public class Signin extends HttpServlet {
+public class Login extends HttpServlet {
 	
-	public static final String ATT_USER         = "utilisateur";
+    public static final String ATT_USER         = "utilisateur";
     public static final String ATT_FORM         = "form";
     public static final String ATT_SESSION_USER = "sessionUtilisateur";
-    public static final String VUE              = "/WEB-INF/register/signin.jsp";
+    public static final String VUE              = "/WEB-INF/register/login.jsp";
     public static final String VUE_SUCCES       = "/WEB-INF/home/home.jsp";
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
@@ -28,7 +26,7 @@ public class Signin extends HttpServlet {
 
     public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
         /* Préparation de l'objet formulaire */
-        CreationForm form = new CreationForm();
+        ConnexionForm form = new ConnexionForm();
 
         /* Traitement de la requête et récupération du bean en résultant */
         User utilisateur = form.connecterUtilisateur( request );
@@ -56,7 +54,7 @@ public class Signin extends HttpServlet {
             session.setAttribute( ATT_SESSION_USER, null );
         }
 
-        /*si aucune erreur on retourne sur la page d'acceuil, si erreur alors on reste sur la page de creation du compte*/
+        /*si aucune erreur on retourne sur la page d'acceuil, si erreur alors on reste sur la page de connection*/
         if ( form.getErreurs().isEmpty() ) {
         	this.getServletContext().getRequestDispatcher( VUE_SUCCES ).forward( request, response );
         } else {

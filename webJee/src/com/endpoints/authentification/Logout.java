@@ -1,4 +1,4 @@
-package com.endpoints.authentication;
+package com.endpoints.authentification;
 
 import java.io.IOException;
 import java.io.PrintWriter;
