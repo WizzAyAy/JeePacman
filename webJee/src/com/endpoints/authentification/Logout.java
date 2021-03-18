@@ -16,7 +16,7 @@ public class Logout extends HttpServlet {
 	public void doGet( HttpServletRequest request, HttpServletResponse response )	throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		session.invalidate();
-		this.getServletContext().getRequestDispatcher( "/WEB-INF/home/home.jsp" ).forward( request, response );
+		this.getServletContext().getRequestDispatcher( "/WEB-INF/pages/home.jsp" ).forward( request, response );
 	}
 	
 }

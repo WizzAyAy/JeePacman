@@ -13,7 +13,7 @@ body {
 }
 
 /* Style the header links */
-.header a, h1{
+.header a{
   float: left;
   color: black;
   text-align: center;
@@ -26,7 +26,7 @@ body {
 }
 
 /* Style the logo link (notice that we set the same value of line-height and font-size to prevent the header to increase when the font gets bigger */
-.header h1.logo {
+.header a.logo {
   font-size: 25px;
   font-weight: bold;
 }
@@ -44,7 +44,7 @@ body {
 
 /* Add media queries for responsiveness - when the screen is 500px wide or less, stack the links on top of each other */
 @media screen and (max-width: 500px) {
-  .header a h1 {
+  .header a {
     float: none;
     display: block;
     text-align: left;

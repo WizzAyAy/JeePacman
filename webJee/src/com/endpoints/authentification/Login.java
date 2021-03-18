@@ -20,7 +20,7 @@ public class Login extends HttpServlet {
     public static final String ATT_FORM         = "form";
     public static final String ATT_SESSION_USER = "sessionUtilisateur";
     public static final String VUE              = "/WEB-INF/register/login.jsp";
-    public static final String VUE_SUCCES       = "/WEB-INF/home/home.jsp";
+    public static final String VUE_SUCCES       = "/WEB-INF/pages/home.jsp";
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
         /* Affichage de la page de connexion */

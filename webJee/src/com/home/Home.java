@@ -12,6 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 public class Home extends HttpServlet  {
 	
 	public void doGet( HttpServletRequest request, HttpServletResponse response )	throws ServletException, IOException {
-		this.getServletContext().getRequestDispatcher( "/WEB-INF/home/home.jsp" ).forward( request, response );
+		this.getServletContext().getRequestDispatcher( "/WEB-INF/pages/home.jsp" ).forward( request, response );
 	}
 }
