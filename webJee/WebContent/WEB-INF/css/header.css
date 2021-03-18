@@ -31,6 +31,14 @@ body {
   font-weight: bold;
 }
 
+.logout {
+	color: red !important;
+}
+
+.connect {
+	color: green !important;
+}
+
 /* Change the background color on mouse-over */
 .header a:hover {
   background-color: #ddd;
@@ -53,3 +61,4 @@ body {
     float: none;
   }
 }
+

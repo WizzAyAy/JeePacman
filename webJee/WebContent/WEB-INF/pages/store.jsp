@@ -8,13 +8,7 @@
 	<title>Pacman</title>
 </head>
 <body>
-	<c:if test="${empty sessionScope.sessionUtilisateur}">
-		<%@ include file="../components/headerUnconnect.jsp" %>
-	</c:if>
-	
-	<c:if test="${!empty sessionScope.sessionUtilisateur}">
-		<%@ include file="../components/hearderConnect.jsp" %>
-	</c:if>
+	<%@ include file="../components/header.jsp" %>	
 	
 	<p>STORE</p>
 	

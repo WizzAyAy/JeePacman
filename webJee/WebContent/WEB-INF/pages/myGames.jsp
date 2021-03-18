@@ -9,13 +9,7 @@
 	<style type="text/css"><%@include file="../css/table.css" %></style>
 </head>
 <body>
-	<c:if test="${empty sessionScope.sessionUtilisateur}">
-		<%@ include file="../components/headerUnconnect.jsp" %>
-	</c:if>
-	
-	<c:if test="${!empty sessionScope.sessionUtilisateur}">
-		<%@ include file="../components/hearderConnect.jsp" %>
-	</c:if>
+	<%@ include file="../components/header.jsp" %>	
 		
 	<div class="center">
 	<%@ page import="org.json.simple.JSONObject"  %>
@@ -68,26 +62,7 @@
 	    games.add(game2);
 	    games.add(game2);
 	    games.add(game2);
-	    games.add(game2);
-	    games.add(game2);
-	    games.add(game2);
-	    games.add(game2);
-	    games.add(game2);
-	    games.add(game2);
-	    games.add(game2);
-	    games.add(game2);
-	    games.add(game2);
-	    games.add(game2);
-	    games.add(game2);
-	    games.add(game2);
-	    games.add(game2);
-	    games.add(game2);
-	    games.add(game2);
-	    games.add(game2);
-	    games.add(game2);
-	    games.add(game2);
-	    games.add(game2);
-	    games.add(game2);
+	  
 	    
 
 	    out.print("<table class=\"styled-table\">");
