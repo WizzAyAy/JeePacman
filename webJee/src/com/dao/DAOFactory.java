@@ -57,7 +57,7 @@ public class DAOFactory {
         }
 
         try {
-            Class.forName( driver );
+            Class.forName(driver);
         } catch ( ClassNotFoundException e ) {
             throw new DAOConfigurationException( "Driver unfindable in the classpath.", e );
         }

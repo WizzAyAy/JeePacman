@@ -28,8 +28,8 @@ public class MyInfo extends HttpServlet  {
 	public void doGet( HttpServletRequest request, HttpServletResponse response )	throws ServletException, IOException {
 		//this.getServletContext().getRequestDispatcher( "/WEB-INF/pages/myInfo.jsp" ).forward( request, response );
 		
-		User player = playerDao.read(request.getAttribute("pseudo").toString());
-		
+		//User player = playerDao.read(request.getAttribute("pseudo").toString());
+		User player = playerDao.read("bob");
 		String json = new Gson().toJson(player);
 	    response.setContentType("application/json");
 	    response.setCharacterEncoding("UTF-8");
