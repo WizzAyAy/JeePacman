@@ -72,9 +72,10 @@
 	       	JSONObject tmpCosmetic = (JSONObject) cosmetics.get(i);
 	       	String price = (String) tmpCosmetic.get("price");
 	       	String name = (String) tmpCosmetic.get("name");
-		       	out.println("<td>" + name + "</td>");
-		       	out.println("<td>" + price + "</td>");
-		       	out.println("<td><a class=\"buy\" href=\"/webJee/store\">buy</a></td>");
+		     	out.println("<td>" + name + "</td>");
+		     	out.println("<td>" + price + "</td>");
+				out.println("<td><form method=\"POST\" action=\"/webJee/store\">");
+				out.println("<input class=\"buy\" type=\"submit\" value=\"Buy me!!!\"></form></td>");
 	       	out.print("</tr>");
 	       	itCosmetics.next();
 	    	i++;

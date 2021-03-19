@@ -39,13 +39,17 @@
 }
 
 .buy {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   font: 11px;
   background-color: #009879;
   color: #dddddd;
-  padding: 2px;
-  border: 1px solid black;
- 
+  padding: 3px;
+  border: 1px solid;
 }
+
+.buy:hover {
+  border: 1px solid darkgreen !important;
+  cursor: pointer;
+  
+}
+
+
