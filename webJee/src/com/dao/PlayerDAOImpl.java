@@ -37,7 +37,32 @@ public class PlayerDAOImpl implements PlayerDAO {
 
 	@Override
 	public void create(User player) throws DAOException {
-		// TODO Auto-generated method stub
+		Connection connection = null;
+	    PreparedStatement preparedStatement = null;
+	    ResultSet incrementalId = null;
+
+	    try {
+	        /* Récupération d'une connexion depuis la Factory */
+	    	connection = daoFactory.getConnection();
+	        preparedStatement = initialisationRequetePreparee( connection, SQL_CREATE_PLAYER, true, player.getEmail(), player.getPassword(), player.getUsername() );
+	        int statut = preparedStatement.executeUpdate();
+	        /* Analyse du statut retourné par la requête d'insertion */
+	        if ( statut == 0 ) {
+	            throw new DAOException( "Échec de la création de l'utilisateur, aucune ligne ajoutée dans la table." );
+	        }
+	        /* Récupération de l'id auto-généré par la requête d'insertion */
+	        incrementalId = preparedStatement.getGeneratedKeys();
+	        if ( incrementalId.next() ) {
+	            /* Puis initialisation de la propriété id du bean Utilisateur avec sa valeur */
+	            player.setId( incrementalId.getInt( 1 ) );
+	        } else {
+	            throw new DAOException( "Échec de la création de l'utilisateur en base, aucun ID auto-généré retourné." );
+	        }
+	    } catch ( SQLException e ) {
+	        throw new DAOException( e );
+	    } finally {
+	        closeAll( incrementalId, preparedStatement, connection );
+	    }
 		
 	}
 
