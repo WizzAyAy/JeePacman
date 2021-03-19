@@ -55,7 +55,7 @@
 	   
 	    out.print("<table class=\"styled-table\">");
 	    out.print("<thead>");
-	    out.print("<tr> <th>Name</th> <th>Price</th> </tr>");
+	    out.print("<tr> <th>Name</th> <th>Price</th> <th>Acheter</th></tr>");
 	    out.print("</thead>");
 	    
 	    out.print("<tbody>");
@@ -74,6 +74,7 @@
 	       	String name = (String) tmpCosmetic.get("name");
 		       	out.println("<td>" + name + "</td>");
 		       	out.println("<td>" + price + "</td>");
+		       	out.println("<td><a class=\"buy\" href=\"/webJee/store\">buy</a></td>");
 	       	out.print("</tr>");
 	       	itCosmetics.next();
 	    	i++;
