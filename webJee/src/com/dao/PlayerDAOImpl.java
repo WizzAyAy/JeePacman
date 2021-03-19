@@ -18,7 +18,7 @@ public class PlayerDAOImpl implements PlayerDAO {
 	private DAOFactory          daoFactory;
 	
 	// SQL querries
-	private static final String SQL_SELECT_BY_PSEUDO = "SELECT id, email, pseudo, password, FROM Player WHERE pseudo = ?";
+	private static final String SQL_SELECT_BY_PSEUDO = "SELECT id, email, pseudo, password FROM Player WHERE pseudo = ?";
 	
 	private static final String SQL_SELECT_COSMETICS = "SELECT * from Cosmetics WHERE id in "
 			+ "(SELECT DISTINCT idCosmetic from PlayerCosmetics WHERE idPlayer="
@@ -83,8 +83,8 @@ public class PlayerDAOImpl implements PlayerDAO {
 	        resultSet = preparedStatement.executeQuery();
 	        
 	        // Retrieve user cosmetics from database
-	        preparedStatement = initialisationRequetePreparee( connection, SQL_SELECT_COSMETICS, false, pseudo );
-	        resultCosmetics = preparedStatement.executeQuery();
+	        //preparedStatement = initialisationRequetePreparee( connection, SQL_SELECT_COSMETICS, false, pseudo );
+	        //resultCosmetics = preparedStatement.executeQuery();
 	        
 	        /* Parcours de la ligne de données de l'éventuel ResulSet retourné */
 	        if (resultSet.next()) {
@@ -124,14 +124,13 @@ public class PlayerDAOImpl implements PlayerDAO {
 	    user.setPassword(resultSet.getString("password"));
 	    user.setUsername(resultSet.getString("pseudo"));
 	   
-	    while(resultCosmetics.next()) 
+	    /*while(resultCosmetics.next()) 
 	    {
 	    	cosmetics.add((Cosmetic) resultCosmetics.getObject(1));
 	    }
-	    user.setComestics(cosmetics);
+	    user.setComestics(cosmetics);*/
 	    
 	    return user;
 	}
-
 }
 
