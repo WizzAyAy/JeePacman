@@ -1,12 +1,35 @@
 package com.dao;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.sql.Array;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import com.bean.Cosmetic;
 import com.bean.User;
 import com.dao.exceptions.DAOException;
 import com.dao.interfaces.PlayerDAO;
+import static com.dao.utilities.DAOutilities.*;
 
 public class PlayerDAOImpl implements PlayerDAO {
 	private DAOFactory          daoFactory;
+	
+	// SQL querries
+	private static final String SQL_SELECT_BY_PSEUDO = "SELECT id, email, pseudo, password, FROM Player WHERE pseudo = ?";
+	
+	private static final String SQL_SELECT_COSMETICS = "SELECT * from Cosmetics WHERE id in "
+			+ "(SELECT DISTINCT idCosmetic from PlayerCosmetics WHERE idPlayer="
+				+ "(SELECT id from Player WHERE pseudo='bob'))";
+	
+	private static final String SQL_CREATE_PLAYER = "INSERT INTO Player (email, password, pseudo) VALUES (?, ?, ?)";
 
+	
+	// -----------------------------
+	
+	// Constructor
     PlayerDAOImpl( DAOFactory daoFactory ) {
         this.daoFactory = daoFactory;
     }
@@ -19,21 +42,71 @@ public class PlayerDAOImpl implements PlayerDAO {
 	}
 
 	@Override
-	public User read(String email) throws DAOException {
-		// TODO Auto-generated method stub
-		return null;
+	public User read(String pseudo) throws DAOException {
+		Connection connection = null;
+	    PreparedStatement preparedStatement = null;
+	    ResultSet resultSet = null;
+	    ResultSet resultCosmetics = null;
+	    User user = null;
+	    
+	    try {
+	        /* Récupération d'une connexion depuis la Factory */
+	        connection = daoFactory.getConnection();
+	        
+	        // Retrieve user data from database
+	        preparedStatement = initialisationRequetePreparee( connection, SQL_SELECT_BY_PSEUDO, false, pseudo );
+	        resultSet = preparedStatement.executeQuery();
+	        
+	        // Retrieve user cosmetics from database
+	        preparedStatement = initialisationRequetePreparee( connection, SQL_SELECT_COSMETICS, false, pseudo );
+	        resultCosmetics = preparedStatement.executeQuery();
+	        
+	        /* Parcours de la ligne de données de l'éventuel ResulSet retourné */
+	        if (resultSet.next()) {
+	            user = map(resultSet, resultCosmetics);
+	        }
+	    } catch ( SQLException e ) {
+	        throw new DAOException( e );
+	    } finally {
+	        closeAll(resultSet, preparedStatement, connection);
+	    }
+
+		
+		return user;
 	}
 
 	@Override
-	public void update(String email) throws DAOException {
+	public void update(String pseudo) throws DAOException {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void delete(String email) throws DAOException {
+	public void delete(String pseudo) throws DAOException {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	/// ------------------ Mapping data to bean
+	
+	private static User map(ResultSet resultSet, ResultSet resultCosmetics) throws SQLException {
+		
+		ArrayList<Cosmetic> cosmetics = new ArrayList<>();
+		
+	    User user = new User();
+	    user.setId(resultSet.getInt("id") );
+	    user.setEmail(resultSet.getString("email") );
+	    user.setPassword(resultSet.getString("password"));
+	    user.setUsername(resultSet.getString("pseudo"));
+	   
+	    while(resultCosmetics.next()) 
+	    {
+	    	cosmetics.add((Cosmetic) resultCosmetics.getObject(1));
+	    }
+	    user.setComestics(cosmetics);
+	    
+	    return user;
 	}
 
 }
+
