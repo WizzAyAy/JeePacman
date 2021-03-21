@@ -1,12 +1,31 @@
 package com.dao;
 
+import static com.dao.utilities.DAOutilities.closeAll;
+import static com.dao.utilities.DAOutilities.initialisationRequetePreparee;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 import com.bean.Cosmetic;
 import com.dao.exceptions.DAOException;
 import com.dao.interfaces.CosmeticsDAO;
 
 public class CosmeticsDAOImpl implements CosmeticsDAO{
-	private DAOFactory          daoFactory;
+	private DAOFactory daoFactory;
 
+	// SQL querries
+	private static final String SQL_SELECT_PLAYER_COSMETICS = "SELECT * from Cosmetics WHERE id in "
+			+ "(SELECT DISTINCT idCosmetic from PlayerCosmetics WHERE idPlayer="
+				+ "(SELECT id from Player WHERE pseudo=?))";
+	
+	private static final String SQL_SELECT_COSMETIC = "SELECT * from Cosmetics WHERE name=?";
+	
+	private static final String SQL_CREATE_COSMETIC = "INSERT INTO Cosmetics (name, price) VALUES (?, ?)";
+	
+	// Constructor
     CosmeticsDAOImpl( DAOFactory daoFactory ) {
         this.daoFactory = daoFactory;
     }
@@ -14,14 +33,92 @@ public class CosmeticsDAOImpl implements CosmeticsDAO{
     
 	@Override
 	public void create(Cosmetic cosmetic) throws DAOException {
-		// TODO Auto-generated method stub
+		Connection connection = null;
+	    PreparedStatement preparedStatement = null;
+	    ResultSet incrementalId = null;
+
+	    try {
+	        /* Récupération d'une connexion depuis la Factory */
+	    	connection = daoFactory.getConnection();
+	        preparedStatement = initialisationRequetePreparee(connection, SQL_CREATE_COSMETIC, true, cosmetic.getName(), cosmetic.getPrice());
+	        int statut = preparedStatement.executeUpdate();
+	        /* Analyse du statut retourné par la requête d'insertion */
+	        if (statut == 0) {
+	            throw new DAOException("Échec de la création de l'utilisateur, aucune ligne ajoutée dans la table.");
+	        }
+	        /* Récupération de l'id auto-généré par la requête d'insertion */
+	        incrementalId = preparedStatement.getGeneratedKeys();
+	        if ( incrementalId.next() ) {
+	            /* Puis initialisation de la propriété id du bean Utilisateur avec sa valeur */
+	            cosmetic.setId(incrementalId.getInt(1));
+	        } else {
+	            throw new DAOException("Échec de la création de l'utilisateur en base, aucun ID auto-généré retourné.");
+	        }
+	    } catch (SQLException e) {
+	        throw new DAOException(e);
+	    } finally {
+	        closeAll(incrementalId, preparedStatement, connection);
+	    }
 		
 	}
 
 	@Override
 	public Cosmetic read(String name) throws DAOException {
-		// TODO Auto-generated method stub
-		return null;
+		Connection connection = null;
+	    PreparedStatement preparedStatement = null;
+	    ResultSet resultSet = null;
+	    Cosmetic cosmetic = null;
+	    
+	    try {
+	        /* Récupération d'une connexion depuis la Factory */
+	        connection = daoFactory.getConnection();
+	        
+	        // Retrieve user data from database
+	        preparedStatement = initialisationRequetePreparee(connection, SQL_SELECT_COSMETIC, false, name);
+	        resultSet = preparedStatement.executeQuery();
+	        
+	        /* Parcours de la ligne de données de l'éventuel ResulSet retourné */
+	        if(resultSet.next()) {
+	            cosmetic = map(resultSet);
+	        }
+	    } catch ( SQLException e ) {
+	        throw new DAOException( e );
+	    } finally {
+	        closeAll(resultSet, preparedStatement, connection);
+	    }
+
+		
+		return cosmetic;
+	}
+	
+	@Override
+	public ArrayList<Cosmetic> readPlayerCosmetics(String pseudo) throws DAOException {
+		Connection connection = null;
+	    PreparedStatement preparedStatement = null;
+	    ResultSet resultSet = null;
+	    
+	    ArrayList<Cosmetic> cosmetics = new ArrayList<>();
+	    
+	    try {
+	        /* Récupération d'une connexion depuis la Factory */
+	        connection = daoFactory.getConnection();
+	        
+	        // Retrieve user data from database
+	        preparedStatement = initialisationRequetePreparee(connection, SQL_SELECT_PLAYER_COSMETICS, false, pseudo);
+	        resultSet = preparedStatement.executeQuery();
+	        
+	        /* Parcours de la ligne de données de l'éventuel ResulSet retourné */
+	        while (resultSet.next()) {
+	            cosmetics.add(map(resultSet));
+	        }
+	    } catch ( SQLException e ) {
+	        throw new DAOException( e );
+	    } finally {
+	        closeAll(resultSet, preparedStatement, connection);
+	    }
+
+		
+		return cosmetics;
 	}
 
 	@Override
@@ -35,5 +132,17 @@ public class CosmeticsDAOImpl implements CosmeticsDAO{
 		// TODO Auto-generated method stub
 		
 	}
+	
+	/// ------------------ Mapping data to bean
+	
+		private static Cosmetic map(ResultSet resultSet) throws SQLException {
+			
+		    Cosmetic cosmetic = new Cosmetic();
+		    cosmetic.setId(resultSet.getInt("id"));
+		    cosmetic.setName(resultSet.getString("name"));
+		    cosmetic.setPrice(resultSet.getFloat("price"));
+		    
+		    return cosmetic;
+		}
 
 }

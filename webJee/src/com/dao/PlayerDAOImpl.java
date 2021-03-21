@@ -20,10 +20,6 @@ public class PlayerDAOImpl implements PlayerDAO {
 	// SQL querries
 	private static final String SQL_SELECT_BY_PSEUDO = "SELECT id, email, pseudo, password FROM Player WHERE pseudo = ?";
 	
-	private static final String SQL_SELECT_COSMETICS = "SELECT * from Cosmetics WHERE id in "
-			+ "(SELECT DISTINCT idCosmetic from PlayerCosmetics WHERE idPlayer="
-				+ "(SELECT id from Player WHERE pseudo='bob'))";
-	
 	private static final String SQL_CREATE_PLAYER = "INSERT INTO Player (email, password, pseudo) VALUES (?, ?, ?)";
 
 	
@@ -44,24 +40,24 @@ public class PlayerDAOImpl implements PlayerDAO {
 	    try {
 	        /* Récupération d'une connexion depuis la Factory */
 	    	connection = daoFactory.getConnection();
-	        preparedStatement = initialisationRequetePreparee( connection, SQL_CREATE_PLAYER, true, player.getEmail(), player.getPassword(), player.getUsername() );
+	        preparedStatement = initialisationRequetePreparee(connection, SQL_CREATE_PLAYER, true, player.getEmail(), player.getPassword(), player.getUsername());
 	        int statut = preparedStatement.executeUpdate();
 	        /* Analyse du statut retourné par la requête d'insertion */
-	        if ( statut == 0 ) {
-	            throw new DAOException( "Échec de la création de l'utilisateur, aucune ligne ajoutée dans la table." );
+	        if (statut == 0) {
+	            throw new DAOException("Échec de la création de l'utilisateur, aucune ligne ajoutée dans la table.");
 	        }
 	        /* Récupération de l'id auto-généré par la requête d'insertion */
 	        incrementalId = preparedStatement.getGeneratedKeys();
 	        if ( incrementalId.next() ) {
 	            /* Puis initialisation de la propriété id du bean Utilisateur avec sa valeur */
-	            player.setId( incrementalId.getInt( 1 ) );
+	            player.setId(incrementalId.getInt(1));
 	        } else {
-	            throw new DAOException( "Échec de la création de l'utilisateur en base, aucun ID auto-généré retourné." );
+	            throw new DAOException("Échec de la création de l'utilisateur en base, aucun ID auto-généré retourné.");
 	        }
-	    } catch ( SQLException e ) {
-	        throw new DAOException( e );
+	    } catch (SQLException e) {
+	        throw new DAOException(e);
 	    } finally {
-	        closeAll( incrementalId, preparedStatement, connection );
+	        closeAll(incrementalId, preparedStatement, connection);
 	    }
 		
 	}
@@ -71,7 +67,6 @@ public class PlayerDAOImpl implements PlayerDAO {
 		Connection connection = null;
 	    PreparedStatement preparedStatement = null;
 	    ResultSet resultSet = null;
-	    ResultSet resultCosmetics = null;
 	    User user = null;
 	    
 	    try {
@@ -79,16 +74,15 @@ public class PlayerDAOImpl implements PlayerDAO {
 	        connection = daoFactory.getConnection();
 	        
 	        // Retrieve user data from database
-	        preparedStatement = initialisationRequetePreparee( connection, SQL_SELECT_BY_PSEUDO, false, pseudo );
+	        preparedStatement = initialisationRequetePreparee(connection, SQL_SELECT_BY_PSEUDO, false, pseudo);
 	        resultSet = preparedStatement.executeQuery();
 	        
-	        // Retrieve user cosmetics from database
-	        //preparedStatement = initialisationRequetePreparee( connection, SQL_SELECT_COSMETICS, false, pseudo );
-	        //resultCosmetics = preparedStatement.executeQuery();
+	        // Retrieve cosmetics 
+	        ArrayList<Cosmetic> cosmetics = daoFactory.getCosmeticsDao().readPlayerCosmetics(pseudo);
 	        
 	        /* Parcours de la ligne de données de l'éventuel ResulSet retourné */
 	        if (resultSet.next()) {
-	            user = map(resultSet, resultCosmetics);
+	            user = map(resultSet, cosmetics);
 	        }
 	    } catch ( SQLException e ) {
 	        throw new DAOException( e );
@@ -114,21 +108,14 @@ public class PlayerDAOImpl implements PlayerDAO {
 	
 	/// ------------------ Mapping data to bean
 	
-	private static User map(ResultSet resultSet, ResultSet resultCosmetics) throws SQLException {
-		
-		ArrayList<Cosmetic> cosmetics = new ArrayList<>();
+	private static User map(ResultSet resultSet, ArrayList<Cosmetic> cosmetics) throws SQLException {
 		
 	    User user = new User();
 	    user.setId(resultSet.getInt("id") );
 	    user.setEmail(resultSet.getString("email") );
 	    user.setPassword(resultSet.getString("password"));
 	    user.setUsername(resultSet.getString("pseudo"));
-	   
-	    /*while(resultCosmetics.next()) 
-	    {
-	    	cosmetics.add((Cosmetic) resultCosmetics.getObject(1));
-	    }
-	    user.setComestics(cosmetics);*/
+	    user.setComestics(cosmetics);
 	    
 	    return user;
 	}
