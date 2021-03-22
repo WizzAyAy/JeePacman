@@ -76,6 +76,9 @@ public final class CreationForm {
         if ( email != null && !email.matches( "([^.@]+)(\\.[^.@]+)*@([^.@]+\\.)+([^.@]+)" ) ) {
             throw new Exception( "Merci de saisir une adresse mail valide." );
         }
+        if (true/*email deja dans la base*/) {
+        	throw new Exception( "Adresse mail deja dans la base." );
+        }
     }
 
     /**
@@ -101,6 +104,10 @@ public final class CreationForm {
             }
         } else {
             throw new Exception( "Merci de saisir votre username." );
+        }
+        
+        if (true/*username deja dans la base*/) {
+        	throw new Exception( "username deja dans la base." );
         }
     }
 

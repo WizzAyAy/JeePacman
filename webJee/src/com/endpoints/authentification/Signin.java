@@ -63,7 +63,7 @@ public class Signin extends HttpServlet {
         if ( form.getErreurs().isEmpty() ) {
         	String token = TokenGen.generateNewToken();
         	session.setAttribute(ATT_TOKEN, token);
-        	//mettre en bdd le token de la session
+        	//mettre en bdd le token de la session + cree l'user 
         	this.getServletContext().getRequestDispatcher( VUE_SUCCES ).forward( request, response );
         } else {
         	this.getServletContext().getRequestDispatcher( VUE ).forward( request, response );
