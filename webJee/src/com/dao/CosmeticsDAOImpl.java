@@ -44,15 +44,15 @@ public class CosmeticsDAOImpl implements CosmeticsDAO{
 	        int statut = preparedStatement.executeUpdate();
 	        /* Analyse du statut retourné par la requête d'insertion */
 	        if (statut == 0) {
-	            throw new DAOException("Échec de la création de l'utilisateur, aucune ligne ajoutée dans la table.");
+	            throw new DAOException("Échec de la création du cosmétique, aucune ligne ajoutée dans la table.");
 	        }
 	        /* Récupération de l'id auto-généré par la requête d'insertion */
 	        incrementalId = preparedStatement.getGeneratedKeys();
-	        if ( incrementalId.next() ) {
+	        if (incrementalId.next()) {
 	            /* Puis initialisation de la propriété id du bean Utilisateur avec sa valeur */
 	            cosmetic.setId(incrementalId.getInt(1));
 	        } else {
-	            throw new DAOException("Échec de la création de l'utilisateur en base, aucun ID auto-généré retourné.");
+	            throw new DAOException("Échec de la création du cosmétique en base, aucun ID auto-généré retourné.");
 	        }
 	    } catch (SQLException e) {
 	        throw new DAOException(e);
@@ -111,8 +111,8 @@ public class CosmeticsDAOImpl implements CosmeticsDAO{
 	        while (resultSet.next()) {
 	            cosmetics.add(map(resultSet));
 	        }
-	    } catch ( SQLException e ) {
-	        throw new DAOException( e );
+	    } catch (SQLException e) {
+	        throw new DAOException(e);
 	    } finally {
 	        closeAll(resultSet, preparedStatement, connection);
 	    }
@@ -122,7 +122,7 @@ public class CosmeticsDAOImpl implements CosmeticsDAO{
 	}
 
 	@Override
-	public void update(String name) throws DAOException {
+	public void update(Cosmetic cosmetic) throws DAOException {
 		// TODO Auto-generated method stub
 		
 	}

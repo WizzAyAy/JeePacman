@@ -20,6 +20,9 @@ public class PlayerDAOImpl implements PlayerDAO {
 	// SQL querries
 	private static final String SQL_SELECT_BY_PSEUDO = "SELECT id, email, pseudo, password FROM Player WHERE pseudo = ?";
 	
+	private static final String SQL_SELECT_GAME_PLAYERS = "SELECT * from Player WHERE id in "
+			+ "(SELECT DISTINCT idPlayer from GamePlayers WHERE idGame=?)";
+	
 	private static final String SQL_CREATE_PLAYER = "INSERT INTO Player (email, password, pseudo) VALUES (?, ?, ?)";
 
 	
@@ -84,8 +87,8 @@ public class PlayerDAOImpl implements PlayerDAO {
 	        if (resultSet.next()) {
 	            user = map(resultSet, cosmetics);
 	        }
-	    } catch ( SQLException e ) {
-	        throw new DAOException( e );
+	    } catch (SQLException e) {
+	        throw new DAOException(e);
 	    } finally {
 	        closeAll(resultSet, preparedStatement, connection);
 	    }
@@ -93,9 +96,38 @@ public class PlayerDAOImpl implements PlayerDAO {
 		
 		return user;
 	}
+	
+	public ArrayList<User> readGamePlayers(Integer id) {
+		Connection connection = null;
+	    PreparedStatement preparedStatement = null;
+	    ResultSet resultSet = null;
+	    
+	    ArrayList<User> players = new ArrayList<>();
+	    
+	    try {
+	        /* Récupération d'une connexion depuis la Factory */
+	        connection = daoFactory.getConnection();
+	        
+	        // Retrieve user data from database
+	        preparedStatement = initialisationRequetePreparee(connection, SQL_SELECT_GAME_PLAYERS, false, id);
+	        resultSet = preparedStatement.executeQuery();
+	        
+	        /* Parcours de la ligne de données de l'éventuel ResulSet retourné */
+	        while (resultSet.next()) {
+	            players.add(map(resultSet, daoFactory.getCosmeticsDao().readPlayerCosmetics(resultSet.getString("pseudo"))));
+	        }
+	    } catch ( SQLException e ) {
+	        throw new DAOException( e );
+	    } finally {
+	        closeAll(resultSet, preparedStatement, connection);
+	    }
+
+		
+		return players;
+	}
 
 	@Override
-	public void update(String pseudo) throws DAOException {
+	public void update(User user) throws DAOException {
 		// TODO Auto-generated method stub
 		
 	}
