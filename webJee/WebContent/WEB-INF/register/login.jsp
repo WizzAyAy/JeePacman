@@ -25,8 +25,10 @@
 		                <td><input type="password" id="motdepasse" name="motdepasse" value="" size="20" maxlength="20" /></td>
 		                <td><span class="erreur">${form.erreurs['motdepasse']}</span></td>
 		            <tr>
+		           		<td><p class="erreur">${form.erreurs['goodIds']}</p></td>
 		            	<td><span class="erreur">${form.erreurs['validate_login']}</span></td>
 		                <td><p class="${empty form.erreurs ? 'succes' : 'erreur'}">${form.resultat}</p></td>
+		                
 					</tr>
                 </table>
                  <input type="submit" value="Connexion" class="submit" /> <br/>

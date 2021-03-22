@@ -20,11 +20,17 @@ public class PlayerDAOImpl implements PlayerDAO {
 	// SQL querries
 	private static final String SQL_SELECT_BY_PSEUDO = "SELECT id, email, pseudo, password FROM Player WHERE pseudo = ?";
 	
+	private static final String SQL_SELECT_BY_EMAIL = "SELECT id, email, pseudo, password FROM Player WHERE email = ?";
+	
 	private static final String SQL_SELECT_GAME_PLAYERS = "SELECT * from Player WHERE id in "
 			+ "(SELECT DISTINCT idPlayer from GamePlayers WHERE idGame=?)";
 	
 	private static final String SQL_CREATE_PLAYER = "INSERT INTO Player (email, password, pseudo) VALUES (?, ?, ?)";
 
+	
+	private static final String SELECT_COUNT_EMAIL = "SELECT COUNT(email) FROM Player WHERE email = ?";
+	
+	private static final String SELECT_COUNT_PSEUDO = "SELECT COUNT(pseudo) FROM Player WHERE pseudo = ?";
 	
 	// -----------------------------
 	
@@ -150,6 +156,99 @@ public class PlayerDAOImpl implements PlayerDAO {
 	    user.setComestics(cosmetics);
 	    
 	    return user;
+	}
+	
+	// ------------- check if already exists -------------
+	public boolean existingEmail(String email) {
+		
+		Connection connection = null;
+	    PreparedStatement preparedStatement = null;
+	    ResultSet resultSet = null;
+	    
+	    
+	    try {
+	        /* Récupération d'une connexion depuis la Factory */
+	        connection = daoFactory.getConnection();
+	        
+	        // Retrieve user data from database
+	        preparedStatement = initialisationRequetePreparee(connection, SELECT_COUNT_EMAIL, false, email);
+	        resultSet = preparedStatement.executeQuery();
+	        	        
+	        /* Parcours de la ligne de données de l'éventuel ResulSet retourné */
+	        if (resultSet.next()) {
+	        	if ( resultSet.getString("COUNT(email)").equals("1") ) return true;
+	        	else return false;
+	        }
+	    } catch (SQLException e) {
+	        throw new DAOException(e);
+	    } finally {
+	        closeAll(resultSet, preparedStatement, connection);
+	    }
+	    return false;
+	}
+	
+	public boolean existingUsername(String username) {
+		
+		Connection connection = null;
+	    PreparedStatement preparedStatement = null;
+	    ResultSet resultSet = null;
+	    
+	    
+	    try {
+	        /* Récupération d'une connexion depuis la Factory */
+	        connection = daoFactory.getConnection();
+	        
+	        // Retrieve user data from database
+	        preparedStatement = initialisationRequetePreparee(connection, SELECT_COUNT_PSEUDO, false, username);
+	        resultSet = preparedStatement.executeQuery();
+	        	        
+	        /* Parcours de la ligne de données de l'éventuel ResulSet retourné */
+	        if (resultSet.next()) {
+	        	
+	        	if ( resultSet.getString("COUNT(pseudo)").equals("1") ) {
+	        		
+	        		return true;
+	        		
+	        	}
+	        	else return false;
+	        }
+	    } catch (SQLException e) {
+	        throw new DAOException(e);
+	    } finally {
+	        closeAll(resultSet, preparedStatement, connection);
+	    }
+	    return false;
+	}
+	
+	//- check if good combo email password- //
+	public boolean goodIds (String email, String password) {
+		Connection connection = null;
+	    PreparedStatement preparedStatement = null;
+	    ResultSet resultSet = null;
+	    
+	    
+	    try {
+	        /* Récupération d'une connexion depuis la Factory */
+	        connection = daoFactory.getConnection();
+	        
+	        // Retrieve user data from database
+	        preparedStatement = initialisationRequetePreparee(connection, SQL_SELECT_BY_EMAIL, false, email);
+	        resultSet = preparedStatement.executeQuery();
+	        	        
+	        /* Parcours de la ligne de données de l'éventuel ResulSet retourné */
+	        if (resultSet.next()) {
+	        	
+	        	if ( resultSet.getString("password").equals(password) ) {
+	        		return true;
+	        	}
+	        	else return false;
+	        }
+	    } catch (SQLException e) {
+	        throw new DAOException(e);
+	    } finally {
+	        closeAll(resultSet, preparedStatement, connection);
+	    }
+	    return false;
 	}
 }
 

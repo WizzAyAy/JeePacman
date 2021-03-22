@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.bean.User;
+import com.dao.DAOFactory;
+import com.dao.PlayerDAOImpl;
 import com.modele.ConnexionForm;
 
 
@@ -25,6 +27,7 @@ public class Login extends HttpServlet {
     public static final String ATT_SESSION_USER = "sessionUtilisateur";
     public static final String VUE              = "/WEB-INF/register/login.jsp";
     public static final String VUE_SUCCES       = "/WEB-INF/pages/home.jsp";
+    public static final String CONF_DAO_FACTORY = "daofactory";
 
     public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
         /* Affichage de la page de connexion */
@@ -40,6 +43,12 @@ public class Login extends HttpServlet {
 
         /* Récupération de la session depuis la requête */
         HttpSession session = request.getSession();
+        
+        PlayerDAOImpl playerDao = ((DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY )).getPlayerDao();
+
+        if(!playerDao.goodIds(request.getParameter( "email" ), request.getParameter( "motdepasse" ))) {
+        	form.setErreur("goodIds", "mauvais id de connection");
+        }
 
         /**
          * Si aucune erreur de validation n'a eu lieu, alors ajout du bean

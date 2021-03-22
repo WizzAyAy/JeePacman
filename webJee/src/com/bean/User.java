@@ -10,6 +10,10 @@ public class User {
 	private String password;
 	private ArrayList<Cosmetic> comestics;
 	
+	public User () {
+		
+	}
+	
     public Integer getId() {
         return id;
     }

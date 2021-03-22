@@ -6,12 +6,15 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.bean.User;
+import com.dao.DAOFactory;
+import com.dao.PlayerDAOImpl;
 
 public final class CreationForm {
 	
     private static final String CHAMP_EMAIL  = "email";
     private static final String CHAMP_PASS   = "motdepasse";
     private static final String CHAMP_USERNAME   = "username";
+    public static final String CONF_DAO_FACTORY = "daofactory";
 
     private String resultat;
     private Map<String, String> erreurs = new HashMap<String, String>();
@@ -28,9 +31,8 @@ public final class CreationForm {
         /* Récupération des champs du formulaire */
         String email = getValeurChamp( request, CHAMP_EMAIL );
         String motDePasse = getValeurChamp( request, CHAMP_PASS );
-        String username = getValeurChamp( request, CHAMP_USERNAME );
-
-
+        String username = getValeurChamp( request, CHAMP_USERNAME );   
+       
         User utilisateur = new User();
 
         /* Validation du champ email. */
@@ -59,7 +61,7 @@ public final class CreationForm {
 
         /* Initialisation du résultat global de la validation. */
         if ( erreurs.isEmpty() ) {
-            resultat = "creation en base de données";
+            resultat = "Échec de la creation.";
         } else {
             resultat = "Échec de la creation.";
         }
@@ -75,9 +77,6 @@ public final class CreationForm {
     	
         if ( email != null && !email.matches( "([^.@]+)(\\.[^.@]+)*@([^.@]+\\.)+([^.@]+)" ) ) {
             throw new Exception( "Merci de saisir une adresse mail valide." );
-        }
-        if (true/*email deja dans la base*/) {
-        	throw new Exception( "Adresse mail deja dans la base." );
         }
     }
 
@@ -105,16 +104,12 @@ public final class CreationForm {
         } else {
             throw new Exception( "Merci de saisir votre username." );
         }
-        
-        if (true/*username deja dans la base*/) {
-        	throw new Exception( "username deja dans la base." );
-        }
     }
 
     /*
      * Ajoute un message correspondant au champ spécifié à la map des erreurs.
      */
-    private void setErreur( String champ, String message ) {
+    public void setErreur( String champ, String message ) {
         erreurs.put( champ, message );
     }
 
