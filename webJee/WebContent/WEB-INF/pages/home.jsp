@@ -24,6 +24,7 @@
 					<li>Vous équipez de skin vraiment beau,
 					dans le but d'avoir un max de succes avec la gente feminine | <i>Store</i></li>
 					<li>Admirez les meilleurs scores des joueurs du monde entier | <i>LeaderBoard</i></li>
+					<li><i>lien du GitHub pour télécharger le jeu | <a href="https://github.com/WizzAyAy/Projet-DesingPattern">Github</a></i></li>
 				</ul>
 		</td></tr>
 				

@@ -64,7 +64,8 @@ public class Login extends HttpServlet {
 
         /*si aucune erreur on retourne sur la page d'acceuil, si erreur alors on reste sur la page de connection*/
         if ( form.getErreurs().isEmpty() ) {
-        	session.setAttribute(ATT_TOKEN, TokenGen.generateNewToken());
+        	String token = TokenGen.generateNewToken();
+        	session.setAttribute(ATT_TOKEN, token);
         	//mettre en bdd le token de la session
         	this.getServletContext().getRequestDispatcher( VUE_SUCCES ).forward( request, response );        	
         	
