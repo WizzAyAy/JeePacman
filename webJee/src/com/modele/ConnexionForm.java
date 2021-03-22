@@ -10,6 +10,7 @@ import com.bean.User;
 public final class ConnexionForm {
     private static final String CHAMP_EMAIL  = "email";
     private static final String CHAMP_PASS   = "motdepasse";
+    private static final String CHAMP_VALIDATE_LOGIN   = "validate_login";
 
     private String resultat;
     private Map<String, String> erreurs = new HashMap<String, String>();
@@ -44,6 +45,14 @@ public final class ConnexionForm {
             setErreur( CHAMP_PASS, e.getMessage() );
         }
         utilisateur.setPassword( motDePasse );
+        
+        /* Validation des id de connection. */
+        try {
+            validationId( email, motDePasse );
+        } catch ( Exception e ) {
+            setErreur( CHAMP_VALIDATE_LOGIN, e.getMessage() );
+
+        }
 
         /* Initialisation du résultat global de la validation. */
         if ( erreurs.isEmpty() ) {
@@ -55,7 +64,13 @@ public final class ConnexionForm {
         return utilisateur;
     }
 
-    /**
+    private void validationId(String email, String motDePasse) throws Exception {
+    	
+    	
+    	throw new Exception( "Le duo email mot de passe ne correspond pas ..." );
+	}
+
+	/**
      * Valide l'adresse email saisie.
      */
     private void validationEmail( String email ) throws Exception {

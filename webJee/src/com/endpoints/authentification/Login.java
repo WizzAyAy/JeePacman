@@ -40,7 +40,6 @@ public class Login extends HttpServlet {
 
         /* Récupération de la session depuis la requête */
         HttpSession session = request.getSession();
-        session.setAttribute( "username", request.getParameter( "motdepasse" ));
 
         /**
          * Si aucune erreur de validation n'a eu lieu, alors ajout du bean
