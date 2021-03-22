@@ -19,6 +19,7 @@ public class Signin extends HttpServlet {
 	
 	public static final String ATT_USER         = "utilisateur";
     public static final String ATT_FORM         = "form";
+    public static final String ATT_TOKEN        = "token";
     public static final String ATT_SESSION_USER = "sessionUtilisateur";
     public static final String VUE              = "/WEB-INF/register/signin.jsp";
     public static final String VUE_SUCCES       = "/WEB-INF/pages/home.jsp";
@@ -60,6 +61,8 @@ public class Signin extends HttpServlet {
 
         /*si aucune erreur on retourne sur la page d'acceuil, si erreur alors on reste sur la page de creation du compte*/
         if ( form.getErreurs().isEmpty() ) {
+        	session.setAttribute(ATT_TOKEN, TokenGen.generateNewToken());
+        	//mettre en bdd le token de la session
         	this.getServletContext().getRequestDispatcher( VUE_SUCCES ).forward( request, response );
         } else {
         	this.getServletContext().getRequestDispatcher( VUE ).forward( request, response );
