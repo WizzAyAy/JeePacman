@@ -7,11 +7,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.bean.User;
 import com.dao.DAOFactory;
 import com.dao.PlayerDAOImpl;
 import com.google.gson.Gson;
+import com.mysql.cj.Session;
 
 @WebServlet( name="MyInfo", urlPatterns = "/myinfo" )
 public class MyInfo extends HttpServlet  {
@@ -29,7 +31,8 @@ public class MyInfo extends HttpServlet  {
 		
 		
 		//User player = playerDao.read(request.getAttribute("pseudo").toString());
-		User player = playerDao.read("alice");
+		 HttpSession session = request.getSession();
+		User player = playerDao.read(session.getAttribute("username").toString());
 		String json = new Gson().toJson(player);
 	    response.setContentType("application/json");
 	    response.setCharacterEncoding("UTF-8");

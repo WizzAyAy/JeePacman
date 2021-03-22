@@ -87,6 +87,8 @@ public class Signin extends HttpServlet {
         	user.setUsername(request.getParameter( "username" ));
         	playerDao.create(user);
         	
+        	session.setAttribute("username",request.getParameter( "username" ));
+        	
         	
         	this.getServletContext().getRequestDispatcher( VUE_SUCCES ).forward( request, response );
         } else {
