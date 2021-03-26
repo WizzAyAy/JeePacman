@@ -21,9 +21,17 @@ public class CosmeticsDAOImpl implements CosmeticsDAO{
 			+ "(SELECT DISTINCT idCosmetic from PlayerCosmetics WHERE idPlayer="
 				+ "(SELECT id from Player WHERE pseudo=?))";
 	
+	private static final String SQL_SELECT_NOT_PLAYER_COSMETICS = "SELECT * from Cosmetics WHERE id not in "
+			+ "(SELECT DISTINCT idCosmetic from PlayerCosmetics WHERE idPlayer="
+				+ "(SELECT id from Player WHERE pseudo=?))";
+	
 	private static final String SQL_SELECT_COSMETIC = "SELECT * from Cosmetics WHERE name=?";
 	
 	private static final String SQL_CREATE_COSMETIC = "INSERT INTO Cosmetics (name, price) VALUES (?, ?)";
+	
+	private static final String SQL_UPDATE_COSMETIC = "UPDATE Cosmetics SET price=?, name=?";
+	
+	private static final String SQL_DELETE_COSMETIC = "DELETE FROM Cosmetics WHERE name=?";
 	
 	// Constructor
     CosmeticsDAOImpl( DAOFactory daoFactory ) {
@@ -123,13 +131,47 @@ public class CosmeticsDAOImpl implements CosmeticsDAO{
 
 	@Override
 	public void update(Cosmetic cosmetic) throws DAOException {
-		// TODO Auto-generated method stub
+		Connection connection = null;
+	    PreparedStatement preparedStatement = null;
+	    ResultSet incrementalId = null;
+
+	    try {
+	        /* Récupération d'une connexion depuis la Factory */
+	    	connection = daoFactory.getConnection();
+	        preparedStatement = initialisationRequetePreparee(connection, SQL_UPDATE_COSMETIC, true, player.getPrice(), player.getName());
+	        int statut = preparedStatement.executeUpdate();
+	        /* Analyse du statut retourné par la requête d'insertion */
+	        if (statut == 0) {
+	            throw new DAOException("Échec de mise à jour du cosmetique, aucune modification effectuée.");
+	        }
+	    } catch (SQLException e) {
+	        throw new DAOException(e);
+	    } finally {
+	        closeAll(incrementalId, preparedStatement, connection);
+	    }
 		
 	}
 
 	@Override
-	public void delete(String name) throws DAOException {
-		// TODO Auto-generated method stub
+	public void delete(Cosmetic cosmetic) throws DAOException {
+		Connection connection = null;
+	    PreparedStatement preparedStatement = null;
+	    ResultSet incrementalId = null;
+
+	    try {
+	        /* Récupération d'une connexion depuis la Factory */
+	    	connection = daoFactory.getConnection();
+	        preparedStatement = initialisationRequetePreparee(connection, SQL_DELETE_COSMETIC, true, cosmetic.getName());
+	        int statut = preparedStatement.executeUpdate();
+	        /* Analyse du statut retourné par la requête d'insertion */
+	        if (statut == 0) {
+	            throw new DAOException("Échec de suppression, mission aborted.");
+	        }
+	    } catch (SQLException e) {
+	        throw new DAOException(e);
+	    } finally {
+	        closeAll(incrementalId, preparedStatement, connection);
+	    }
 		
 	}
 	

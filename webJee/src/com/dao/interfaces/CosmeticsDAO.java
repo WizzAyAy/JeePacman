@@ -10,5 +10,5 @@ public interface CosmeticsDAO {
 	Cosmetic read(String name) throws DAOException;
 	public ArrayList<Cosmetic> readPlayerCosmetics(String pseudo) throws DAOException;
 	void update(Cosmetic cosmetic) throws DAOException;
-	void delete(String name) throws DAOException;
+	void delete(Cosmetic cosmetic) throws DAOException;
 }
