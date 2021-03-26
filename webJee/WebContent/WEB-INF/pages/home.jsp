@@ -30,12 +30,7 @@
 				
 	</table>
 	</div>
-	
-	<%
-	out.println(session.getAttribute("username"));
-	out.println(session.getAttribute("token"));
-	%>
-	
+		
 	
 </body>
 </html>

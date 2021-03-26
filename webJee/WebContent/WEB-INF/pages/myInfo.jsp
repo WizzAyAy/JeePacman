@@ -22,9 +22,8 @@
 		JSONParser parser = new JSONParser();
 	    String attribut = (String) request.getAttribute("json");
 	    
-	    JSONObject jsonObject = (JSONObject) parser.parse(attribut);
 	    
-	
+	    JSONObject jsonObject = (JSONObject) parser.parse(attribut);
    			    
 	    out.print("<table class=\"styled-table\">");
 	    out.print("<thead>");
@@ -44,22 +43,23 @@
 	            out.print("</td>");
 	            
 	            
-	            if(jsonObject.get("cosmetics") != null){
-		            JSONArray cosmetics = (JSONArray) jsonObject.get("cosmetics");
+	            if(jsonObject.get("comestics") != null){
+		            JSONArray cosmetics = (JSONArray) jsonObject.get("comestics");
 		            Iterator<String> itCosmetics = cosmetics.iterator();
 		            //affichade des players
 		            int i = 0;
 		            out.print("<td>");
+		            out.print("<ul>");
 		            while (itCosmetics.hasNext()) {
 		            	JSONObject tmpCosmetic = (JSONObject) cosmetics.get(i);
-		            	String price = (String) tmpCosmetic.get("price");
+		            	double price = (double) tmpCosmetic.get("price");
 		            	String name = (String) tmpCosmetic.get("name");
-		            	out.println(name + "(" + price + ")");
+		            	out.println("<li>" + name + " | " + price + " € </li>");
 		            	
 		            	itCosmetics.next();
-		            	if(itCosmetics.hasNext()) out.println(" ,");
 		         	    i++;
 		            }
+		            out.print("</ul>");
 		            out.print("</td>");   
 	            }
 	            else {

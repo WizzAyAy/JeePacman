@@ -35,7 +35,6 @@ public class Store extends HttpServlet  {
         
         
         /* 	FAIRE LA REQUETE POUR RECUP TOUS LES COSMETICS SAUF CEUX DE LA TABLE PLAYERS*/
-        System.out.println(session.getAttribute("token").toString());
         ArrayList<Cosmetic> cosmetics = cosmeticDao.readPlayerNotCosmetics(session.getAttribute("token").toString());
 		String json = new Gson().toJson(cosmetics);
 	    response.setContentType("application/json");
@@ -57,9 +56,9 @@ public class Store extends HttpServlet  {
         
         /* RECUP L ID DU COSMETICS A BUY */
         
-        cosmeticDao.buyCosmetic(request.getParameter("idCosmetic"), session.getAttribute("token").toString());
+        boolean buyed = cosmeticDao.buyCosmetic(session.getAttribute("token").toString() ,request.getParameter("idCosmetic"));
         /* 	FAIRE LA REQUETE POUR RECUP TOUS LES COSMETICS SAUF CEUX DE LA TABLE PLAYERS*/
-        System.out.println(session.getAttribute("token").toString());
+        
         ArrayList<Cosmetic> cosmetics = cosmeticDao.readPlayerNotCosmetics(session.getAttribute("token").toString());
 		String json = new Gson().toJson(cosmetics);
 	    response.setContentType("application/json");
@@ -69,7 +68,7 @@ public class Store extends HttpServlet  {
 		request.setAttribute( "cosmetics", json );
         
         
-        if(true)
+        if(!buyed)
         	request.setAttribute("buy", "Vous n'avez pas assez d'argent");
         else 
         	request.setAttribute("buy", "Vous avez acheté le cosmetic !");

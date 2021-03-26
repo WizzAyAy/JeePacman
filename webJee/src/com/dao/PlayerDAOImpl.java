@@ -49,8 +49,6 @@ public class PlayerDAOImpl implements PlayerDAO {
 		Connection connection = null;
 	    PreparedStatement preparedStatement = null;
 	    ResultSet incrementalId = null;
-
-	    System.out.println(player.getToken());
 	    try {
 	        /* Récupération d'une connexion depuis la Factory */
 	    	connection = daoFactory.getConnection();

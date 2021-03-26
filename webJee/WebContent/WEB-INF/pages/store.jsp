@@ -7,6 +7,11 @@
 	<meta charset="UTF-8">
 	<title>Pacman</title>
 	<style type="text/css"><%@include file="../css/table.css" %></style>
+	<style type="text/css">
+	p{
+		text-align: center;
+	}
+	</style>
 </head>
 <body>
 	<%@ include file="../components/header.jsp" %>	
@@ -29,11 +34,16 @@
 	    
 	    cosmeticJson.put("cosmetics", cosmeticsArray);
 	    
-
-	   
+   
 	    out.print("<table class=\"styled-table\">");
+	    
 	    out.print("<thead>");
-	    out.print("<tr> <th>Name</th> <th>Price</th> <th>Acheter</th></tr>");
+		if(cosmeticJson.toString().equals("{\"cosmetics\":[]}"))
+			out.print("<tr> <th>VOUS AVEZ ACHETE TOUS LES COSMETICS OMG !!!</th> </tr>");
+	    
+		else 
+			out.print("<tr> <th>Name</th> <th>Price</th> <th>Acheter</th> </tr>");
+		
 	    out.print("</thead>");
 	    
 	    out.print("<tbody>");
@@ -66,11 +76,18 @@
 			i++;
         }  	
         out.print("</tbody>");
-	    out.print("</table>");
-	    
-	    
-	%>
+	    out.print("</table>");	    
+	
+	    %>
+
 	</div>
+	
+	
+	<%
+	Object buyed = request.getAttribute("buy");
+	if(buyed != null)
+		out.print("<p>" + buyed.toString()  + "</p>");
+	%>
 	
 </body>
 </html>

@@ -66,8 +66,12 @@ INSERT Into Player (email, password, pseudo) VALUES ('alice@random.com', MD5('So
 	# Cosmetics
 INSERT into Cosmetics (price, name) VALUES (28.00,'Spocks ears');
 INSERT into Cosmetics (price, name) VALUES (24.99,'Top Hat');
-	
-	# Games
+INSERT into Cosmetics (price, name) VALUES (100,'Assiimov skin');
+INSERT into Cosmetics (price, name) VALUES (2000,'Dragon lord');
+INSERT into Cosmetics (price, name) VALUES (850,'fire serpent');
+INSERT into Cosmetics (price, name) VALUES (0.20,'safari mesh');
+
+# Games
 INSERT into Games (score) VALUES (31541);
 INSERT into Games (score) VALUES (0);
 INSERT into Games (score) VALUES (69420);

@@ -25,7 +25,7 @@ public class CosmeticsDAOImpl implements CosmeticsDAO{
 			+ "(SELECT DISTINCT idCosmetic from PlayerCosmetics WHERE idPlayer="
 				+ "(SELECT id from Player WHERE token=?))";
 	
-	private static final String SQL_ADD_COSMETIC_PLAYER = "INSER INTO PlayerCosmetics (idCosmetic, idPlayer)" +
+	private static final String SQL_ADD_COSMETIC_PLAYER = "INSERT INTO PlayerCosmetics (idCosmetic, idPlayer)" +
 	 " VALUES (? , (SELECT id from Player WHERE token=?) )";
 		
 	private static final String SQL_SELECT_COSMETIC = "SELECT * from Cosmetics WHERE name=?";
@@ -173,8 +173,8 @@ public class CosmeticsDAOImpl implements CosmeticsDAO{
 		        connection = daoFactory.getConnection();
 		        
 		        // Retrieve user data from database
-		        preparedStatement = initialisationRequetePreparee(connection, SQL_ADD_COSMETIC_PLAYER, false, id, token);  
-		        preparedStatement.executeQuery();
+		        preparedStatement = initialisationRequetePreparee(connection, SQL_ADD_COSMETIC_PLAYER, false, Integer.parseInt(id), token);  
+		        preparedStatement.executeUpdate();
 		        
 		    } catch (SQLException e) {
 		        throw new DAOException(e);
