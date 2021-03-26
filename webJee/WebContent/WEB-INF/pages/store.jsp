@@ -17,41 +17,19 @@
 	<%@ page import="org.json.simple.JSONArray"  %>
 	<%@ page import="java.util.Iterator"  %>
 	
-	<%		    
-	    
-	    JSONObject cosmeticJson = new JSONObject();
-
-	    JSONArray cosmeticsArray = new JSONArray();
-	    JSONObject cosmetic1 = new JSONObject();
-	    JSONObject cosmetic2 = new JSONObject();
-	    JSONObject cosmetic3 = new JSONObject();
-	    JSONObject cosmetic4 = new JSONObject();
-	    JSONObject cosmetic5 = new JSONObject();
-
-	    cosmetic1.put("price","10€");
-	    cosmetic1.put("name","asiimov");
-	    
-	    cosmetic2.put("price","1000€");
-	    cosmetic2.put("name","dragon Lord");
-	    
-	    cosmetic3.put("price","3000€");
-	    cosmetic3.put("name","fire serpent");
-	    
-	    cosmetic4.put("price","1€");
-	    cosmetic4.put("name","safari Mesh");
-	    
-	    cosmetic5.put("price","500€");
-	    cosmetic5.put("name","howl");
-	    
-	    cosmeticsArray.add(cosmetic1);
-	    cosmeticsArray.add(cosmetic2);
-	    cosmeticsArray.add(cosmetic3);
-	    cosmeticsArray.add(cosmetic4);
-	    cosmeticsArray.add(cosmetic5);
-	    
+	<%		  
+		String buy = (String) request.getAttribute("buy");
+	    	    
+	    JSONParser parser = new JSONParser();
+	    String attribut = (String) request.getAttribute("cosmetics");
 	   
+	    JSONArray cosmeticsArray = (JSONArray) parser.parse(attribut);
+
+	    JSONObject cosmeticJson = new JSONObject();
 	    
 	    cosmeticJson.put("cosmetics", cosmeticsArray);
+	    
+
 	   
 	    out.print("<table class=\"styled-table\">");
 	    out.print("<thead>");
@@ -68,28 +46,29 @@
        int i = 0;
        
 		while (itCosmetics.hasNext()) {
-	    	out.print("<tr>");
-	       	JSONObject tmpCosmetic = (JSONObject) cosmetics.get(i);
-	       	String price = (String) tmpCosmetic.get("price");
-	       	String name = (String) tmpCosmetic.get("name");
-	       	String id = (String) tmpCosmetic.get("id");
+			JSONObject tmpCosmetic = (JSONObject) cosmetics.get(i);
+        	
+			double price = (double) tmpCosmetic.get("price");
+        	String name = (String) tmpCosmetic.get("name");
+        	long id = (long) tmpCosmetic.get("id");
+	    		       	
+	       	out.print("<tr>");
 		     	out.println("<td>" + name + "</td>");
 		     	out.println("<td>" + price + "</td>");
 				out.println("<td><form method=\"POST\" action=\"/webJee/store\">");
 				out.println("<input name=\"idCosmetic\" type=\"hidden\" value=" + id + ">");
 				out.println("<input class=\"buy\" type=\"submit\" value=\"Buy me!!!\"></form></td>");
 	       	out.print("</tr>");
-	       	itCosmetics.next();
-	    	i++;
+	       	
 	    	
-        }    	
+	    	
+	    	itCosmetics.next();
+			i++;
+        }  	
         out.print("</tbody>");
 	    out.print("</table>");
 	    
-	    String buy = (String) request.getAttribute("buy");
 	    
-	    String test = (String) request.getAttribute("cosmetics");
-	    out.println(test);
 	%>
 	</div>
 	

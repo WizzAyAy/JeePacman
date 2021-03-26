@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import com.bean.Cosmetic;
 import com.bean.User;
 import com.dao.CosmeticsDAOImpl;
+import com.dao.DAOFactory;
 import com.dao.PlayerDAOImpl;
 import com.google.gson.Gson;
 
@@ -21,6 +22,12 @@ public class Store extends HttpServlet  {
 	
 	public static final String CONF_DAO_FACTORY = "daofactory";
 	private CosmeticsDAOImpl cosmeticDao;
+	
+	
+	public void init() throws ServletException {
+        /* Récupération d'une instance de notre DAO cosmetics */
+        this.cosmeticDao = ((DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY )).getCosmeticsDao();
+    }
 	
 	public void doGet( HttpServletRequest request, HttpServletResponse response )	throws ServletException, IOException {
 		/* Récupération de la session depuis la requête */
