@@ -138,7 +138,7 @@ public class CosmeticsDAOImpl implements CosmeticsDAO{
 	    try {
 	        /* Récupération d'une connexion depuis la Factory */
 	    	connection = daoFactory.getConnection();
-	        preparedStatement = initialisationRequetePreparee(connection, SQL_UPDATE_COSMETIC, true, player.getPrice(), player.getName());
+	        preparedStatement = initialisationRequetePreparee(connection, SQL_UPDATE_COSMETIC, true, cosmetic.getPrice(), cosmetic.getName());
 	        int statut = preparedStatement.executeUpdate();
 	        /* Analyse du statut retourné par la requête d'insertion */
 	        if (statut == 0) {
