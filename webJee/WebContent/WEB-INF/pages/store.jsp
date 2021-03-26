@@ -87,6 +87,9 @@
 	    out.print("</table>");
 	    
 	    String buy = (String) request.getAttribute("buy");
+	    
+	    String test = (String) request.getAttribute("cosmetics");
+	    out.println(test);
 	%>
 	</div>
 	

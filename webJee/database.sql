@@ -1,5 +1,5 @@
 # DROP DATABASE if need be
-# DROP DATABASE pacman;
+DROP DATABASE pacman;
 
 # Creation of the database
 

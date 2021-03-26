@@ -19,11 +19,11 @@ public class CosmeticsDAOImpl implements CosmeticsDAO{
 	// SQL querries
 	private static final String SQL_SELECT_PLAYER_COSMETICS = "SELECT * from Cosmetics WHERE id in "
 			+ "(SELECT DISTINCT idCosmetic from PlayerCosmetics WHERE idPlayer="
-				+ "(SELECT id from Player WHERE pseudo=?))";
+				+ "(SELECT id from Player WHERE token=?))";
 	
 	private static final String SQL_SELECT_NOT_PLAYER_COSMETICS = "SELECT * from Cosmetics WHERE id not in "
 			+ "(SELECT DISTINCT idCosmetic from PlayerCosmetics WHERE idPlayer="
-				+ "(SELECT id from Player WHERE pseudo=?))";
+				+ "(SELECT id from Player WHERE token=?))";
 	
 	private static final String SQL_SELECT_COSMETIC = "SELECT * from Cosmetics WHERE name=?";
 	
@@ -100,7 +100,7 @@ public class CosmeticsDAOImpl implements CosmeticsDAO{
 	}
 	
 	@Override
-	public ArrayList<Cosmetic> readPlayerCosmetics(String pseudo) throws DAOException {
+	public ArrayList<Cosmetic> readPlayerCosmetics(String token) throws DAOException {
 		Connection connection = null;
 	    PreparedStatement preparedStatement = null;
 	    ResultSet resultSet = null;
@@ -112,7 +112,36 @@ public class CosmeticsDAOImpl implements CosmeticsDAO{
 	        connection = daoFactory.getConnection();
 	        
 	        // Retrieve user data from database
-	        preparedStatement = initialisationRequetePreparee(connection, SQL_SELECT_PLAYER_COSMETICS, false, pseudo);
+	        preparedStatement = initialisationRequetePreparee(connection, SQL_SELECT_PLAYER_COSMETICS, false, token);
+	        resultSet = preparedStatement.executeQuery();
+	        
+	        /* Parcours de la ligne de données de l'éventuel ResulSet retourné */
+	        while (resultSet.next()) {
+	            cosmetics.add(map(resultSet));
+	        }
+	    } catch (SQLException e) {
+	        throw new DAOException(e);
+	    } finally {
+	        closeAll(resultSet, preparedStatement, connection);
+	    }
+
+		
+		return cosmetics;
+	}
+	
+	public ArrayList<Cosmetic> readPlayerNotCosmetics(String token) throws DAOException {
+		Connection connection = null;
+	    PreparedStatement preparedStatement = null;
+	    ResultSet resultSet = null;
+	    
+	    ArrayList<Cosmetic> cosmetics = new ArrayList<>();
+	    
+	    try {
+	        /* Récupération d'une connexion depuis la Factory */
+	        connection = daoFactory.getConnection();
+	        
+	        // Retrieve user data from database
+	        preparedStatement = initialisationRequetePreparee(connection, SQL_SELECT_NOT_PLAYER_COSMETICS, false, token);
 	        resultSet = preparedStatement.executeQuery();
 	        
 	        /* Parcours de la ligne de données de l'éventuel ResulSet retourné */

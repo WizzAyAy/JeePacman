@@ -31,7 +31,7 @@ public class MyInfo extends HttpServlet  {
 		
 		
 		//User player = playerDao.read(request.getAttribute("pseudo").toString());
-		 HttpSession session = request.getSession();
+		HttpSession session = request.getSession();
 		User player = playerDao.read(session.getAttribute("username").toString());
 		String json = new Gson().toJson(player);
 	    response.setContentType("application/json");

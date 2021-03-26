@@ -1,6 +1,7 @@
 package com.endpoints;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,8 +10,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.bean.Cosmetic;
+import com.bean.User;
+import com.dao.CosmeticsDAOImpl;
+import com.dao.PlayerDAOImpl;
+import com.google.gson.Gson;
+
 @WebServlet( name="Store", urlPatterns = "/store" )
 public class Store extends HttpServlet  {
+	
+	public static final String CONF_DAO_FACTORY = "daofactory";
+	private CosmeticsDAOImpl cosmeticDao;
 	
 	public void doGet( HttpServletRequest request, HttpServletResponse response )	throws ServletException, IOException {
 		/* Récupération de la session depuis la requête */
@@ -18,7 +28,14 @@ public class Store extends HttpServlet  {
         
         
         /* 	FAIRE LA REQUETE POUR RECUP TOUS LES COSMETICS SAUF CEUX DE LA TABLE PLAYERS*/
-        
+        System.out.println(session.getAttribute("token").toString());
+        ArrayList<Cosmetic> cosmetics = cosmeticDao.readPlayerNotCosmetics(session.getAttribute("token").toString());
+		String json = new Gson().toJson(cosmetics);
+	    response.setContentType("application/json");
+	    response.setCharacterEncoding("UTF-8");
+	    response.setStatus(200);
+	    response.getWriter().write(json);
+		request.setAttribute( "cosmetics", json );
         
         /* 	mettre la reponse de la req sql dans la session */
         session.setAttribute( "jsonCosmetic", null );
@@ -36,6 +53,8 @@ public class Store extends HttpServlet  {
         request.getParameter("idCosmetic");
         
         /* 	FAIRE LA REQUETE POUR RECUP TOUS LES COSMETICS SAUF CEUX DE LA TABLE PLAYERS*/
+        
+		
         
         if(true)
         	request.setAttribute("buy", "Vous n'avez pas assez d'argent");
