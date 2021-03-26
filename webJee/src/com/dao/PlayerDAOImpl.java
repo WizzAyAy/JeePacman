@@ -18,14 +18,14 @@ public class PlayerDAOImpl implements PlayerDAO {
 	private DAOFactory          daoFactory;
 	
 	// SQL querries
-	private static final String SQL_SELECT_BY_PSEUDO = "SELECT id, email, pseudo, password FROM Player WHERE pseudo = ?";
+	private static final String SQL_SELECT_USER = "SELECT id, email, pseudo, password FROM Player WHERE token = ?";
 	
 	private static final String SQL_SELECT_BY_EMAIL = "SELECT id, email, pseudo, password FROM Player WHERE email = ?";
 	
 	private static final String SQL_SELECT_GAME_PLAYERS = "SELECT * from Player WHERE id in "
 			+ "(SELECT DISTINCT idPlayer from GamePlayers WHERE idGame=?)";
 	
-	private static final String SQL_CREATE_PLAYER = "INSERT INTO Player (email, password, pseudo) VALUES (?, ?, ?)";
+	private static final String SQL_CREATE_PLAYER = "INSERT INTO Player (email, password, pseudo, token) VALUES (?, ?, ?, ?)";
 
 	
 	private static final String SELECT_COUNT_EMAIL = "SELECT COUNT(email) FROM Player WHERE email = ?";
@@ -53,7 +53,7 @@ public class PlayerDAOImpl implements PlayerDAO {
 	    try {
 	        /* Récupération d'une connexion depuis la Factory */
 	    	connection = daoFactory.getConnection();
-	        preparedStatement = initialisationRequetePreparee(connection, SQL_CREATE_PLAYER, true, player.getEmail(), player.getPassword(), player.getUsername());
+	        preparedStatement = initialisationRequetePreparee(connection, SQL_CREATE_PLAYER, true, player.getEmail(), player.getPassword(), player.getUsername(), player.getToken());
 	        int statut = preparedStatement.executeUpdate();
 	        /* Analyse du statut retourné par la requête d'insertion */
 	        if (statut == 0) {
@@ -76,7 +76,7 @@ public class PlayerDAOImpl implements PlayerDAO {
 	}
 
 	@Override
-	public User read(String pseudo) throws DAOException {
+	public User read(String token) throws DAOException {
 		Connection connection = null;
 	    PreparedStatement preparedStatement = null;
 	    ResultSet resultSet = null;
@@ -87,11 +87,11 @@ public class PlayerDAOImpl implements PlayerDAO {
 	        connection = daoFactory.getConnection();
 	        
 	        // Retrieve user data from database
-	        preparedStatement = initialisationRequetePreparee(connection, SQL_SELECT_BY_PSEUDO, false, pseudo);
+	        preparedStatement = initialisationRequetePreparee(connection, SQL_SELECT_USER, false, token);
 	        resultSet = preparedStatement.executeQuery();
 	        
 	        // Retrieve cosmetics 
-	        ArrayList<Cosmetic> cosmetics = daoFactory.getCosmeticsDao().readPlayerCosmetics(pseudo);
+	        ArrayList<Cosmetic> cosmetics = daoFactory.getCosmeticsDao().readPlayerCosmetics(token);
 	        
 	        /* Parcours de la ligne de données de l'éventuel ResulSet retourné */
 	        if (resultSet.next()) {
