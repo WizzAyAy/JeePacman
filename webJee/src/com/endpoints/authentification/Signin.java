@@ -80,6 +80,7 @@ public class Signin extends HttpServlet {
         if ( form.getErreurs().isEmpty() ) {
         	String token = TokenGen.generateNewToken();
         	session.setAttribute(ATT_TOKEN, token);
+        	session.setAttribute("email", request.getParameter( "email" ));
         	//mettre en bdd le token de la session + cree l'user
         	User user = new User();
         	user.setEmail(request.getParameter( "email" ));

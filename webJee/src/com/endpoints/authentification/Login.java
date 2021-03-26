@@ -74,6 +74,7 @@ public class Login extends HttpServlet {
         if ( form.getErreurs().isEmpty() ) {
         	String token = TokenGen.generateNewToken();
         	session.setAttribute(ATT_TOKEN, token);
+        	session.setAttribute("email", request.getParameter( "email" ));
         	//mettre en bdd le token de la session
         	User user = new User();
         	user.setEmail(request.getParameter( "email" ));
@@ -82,6 +83,8 @@ public class Login extends HttpServlet {
         	
         	playerDao.updateToken(user);
 
+        	
+        	
         	this.getServletContext().getRequestDispatcher( VUE_SUCCES ).forward( request, response );        	
         	
         } else {
