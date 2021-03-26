@@ -85,6 +85,7 @@ public class Signin extends HttpServlet {
         	user.setEmail(request.getParameter( "email" ));
         	user.setPassword(request.getParameter( "motdepasse" ));
         	user.setUsername(request.getParameter( "username" ));
+        	user.setToken(token);
         	playerDao.create(user);
         	
         	session.setAttribute("username",request.getParameter( "username" ));

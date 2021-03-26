@@ -51,7 +51,7 @@
 	    
 	    games.add(game2);
 	    games.add(game1);
-	    
+	       
 
 	    out.print("<table class=\"styled-table\">");
 	    out.print("<thead>");

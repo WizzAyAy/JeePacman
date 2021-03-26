@@ -9,7 +9,16 @@ public class User {
 	private String email;
 	private String password;
 	private ArrayList<Cosmetic> comestics;
+	private String token;
 	
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
 	public User () {
 		
 	}
@@ -38,6 +47,7 @@ public class User {
 	public String getPassword() {
 		return password;
 	}
+	
 	public void setPassword(String password) {
 		this.password = password;
 	}
