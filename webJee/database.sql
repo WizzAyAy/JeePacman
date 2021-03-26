@@ -19,6 +19,7 @@ CREATE TABLE  pacman.Cosmetics (
 
 CREATE TABLE  pacman.Player (
  id INT( 10 ) NOT NULL AUTO_INCREMENT ,
+ token VARCHAR( 30 ),
  email VARCHAR( 60 ) NOT NULL ,
  password VARCHAR( 64 ) NOT NULL ,
  pseudo VARCHAR( 20 ) NOT NULL ,
