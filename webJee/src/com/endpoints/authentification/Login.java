@@ -79,6 +79,7 @@ public class Login extends HttpServlet {
         	user.setEmail(request.getParameter( "email" ));
         	user.setPassword(request.getParameter( "motdepasse" ));
         	user.setToken(token);
+        	
         	playerDao.updateToken(user);
 
         	this.getServletContext().getRequestDispatcher( VUE_SUCCES ).forward( request, response );        	

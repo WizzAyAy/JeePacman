@@ -32,7 +32,7 @@ public class MyInfo extends HttpServlet  {
 		
 		//User player = playerDao.read(request.getAttribute("pseudo").toString());
 		HttpSession session = request.getSession();
-		User player = playerDao.read(session.getAttribute("username").toString());
+		User player = playerDao.read(session.getAttribute("token").toString());
 		String json = new Gson().toJson(player);
 	    response.setContentType("application/json");
 	    response.setCharacterEncoding("UTF-8");

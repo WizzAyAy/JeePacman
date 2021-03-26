@@ -57,11 +57,17 @@ public class Store extends HttpServlet  {
         
         /* RECUP L ID DU COSMETICS A BUY */
         
-        request.getParameter("idCosmetic");
-        
+        cosmeticDao.buyCosmetic(request.getParameter("idCosmetic"), session.getAttribute("token").toString());
         /* 	FAIRE LA REQUETE POUR RECUP TOUS LES COSMETICS SAUF CEUX DE LA TABLE PLAYERS*/
+        System.out.println(session.getAttribute("token").toString());
+        ArrayList<Cosmetic> cosmetics = cosmeticDao.readPlayerNotCosmetics(session.getAttribute("token").toString());
+		String json = new Gson().toJson(cosmetics);
+	    response.setContentType("application/json");
+	    response.setCharacterEncoding("UTF-8");
+	    response.setStatus(200);
+	    response.getWriter().write(json);
+		request.setAttribute( "cosmetics", json );
         
-		
         
         if(true)
         	request.setAttribute("buy", "Vous n'avez pas assez d'argent");
