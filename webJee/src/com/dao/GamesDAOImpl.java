@@ -23,13 +23,20 @@ public class GamesDAOImpl implements GamesDAO{
 		
 		private static final String SQL_SELECT_GAMES_PLAYER = "SELECT * FROM GamePlayers WHERE idPlayer=(SELECT id FROM Player WHERE token=?)";
 		
+		private static final String SQL_SELECT_GAMES_25_BEST_GAMES = "select * from Games ORDER BY score DESC LIMIT 25";
+
+
+		
 		private static final String SQL_CREATE_GAME = "INSERT INTO Games (score) VALUES (?)";
+		
 		private static final String SQL_ADD_GAME_PLAYERS = "INSERT INTO GamePlayers (idGame, idPlayer) VALUES (?, (SELECT id FROM Player WHERE token=?))";
 		
 		// Useless as we won't change the score nor the players of a game already played
 		//private static final String SQL_UPDATE_GAME = "UPDATE Games SET score=? WHERE id=?";
 		
 		private static final String SQL_DELETE_GAME = "DELETE FROM Games WHERE id=?";
+
+		private static final String SQL_SELECT_GAME_PLAYERS = "SELECT * from Player WHERE id in (SELECT DISTINCT idPlayer from GamePlayers WHERE idGame=?)";
 
     GamesDAOImpl( DAOFactory daoFactory ) {
         this.daoFactory = daoFactory;
@@ -147,12 +154,12 @@ public class GamesDAOImpl implements GamesDAO{
 	        preparedStatement = initialisationRequetePreparee(connection, SQL_SELECT_GAMES_PLAYER, false, token);
 	        resultSet = preparedStatement.executeQuery();
 	        System.out.println("idgame : " + resultSet.findColumn("idGame"));
-	        preparedStatementScore= initialisationRequetePreparee(connection, SQL_SELECT_GAME, false, resultSet.findColumn("idGame"));
+	        preparedStatementScore= initialisationRequetePreparee(connection, SQL_SELECT_GAME, false, resultSet.getInt("idGame"));
 	        resultSetScore = preparedStatementScore.executeQuery();
 	        System.out.println("score : "+resultSetScore.findColumn("score"));
 	        
 	        // Retrieve cosmetics 
-	        ArrayList<User> players = daoFactory.getPlayerDao().readGamePlayers(resultSet.findColumn("idGame"));
+	        ArrayList<User> players = daoFactory.getPlayerDao().readGamePlayers(resultSet.getInt("idGame"));
 	        System.out.println(players.size());
 	        /* Parcours de la ligne de données de l'éventuel ResulSet retourné */
 	        if(resultSet.next()) {
@@ -163,6 +170,57 @@ public class GamesDAOImpl implements GamesDAO{
 	    	    
 	    	    games.add(game);
 	    	    
+	        }
+	    } catch ( SQLException e ) {
+	        throw new DAOException( e );
+	    } finally {
+	        closeAll(resultSet, preparedStatement, connection);
+	    }
+
+		
+		return games;
+	}
+	
+	public ArrayList<Game> readBest() throws DAOException {
+		Connection connection = null;
+	    PreparedStatement preparedStatement = null;
+	    ResultSet resultSet = null;
+	    PreparedStatement preparedStatementPlayers = null;
+	    ResultSet resultSetPlayers = null;
+	    ArrayList<User> players = new ArrayList<User>();
+	    ArrayList<Game> games = new ArrayList<Game>();
+	    Game game = new Game();
+	    
+	    try {
+	        /* Récupération d'une connexion depuis la Factory */
+	        connection = daoFactory.getConnection();
+	        
+	        // Retrieve user data from database
+	        preparedStatement = initialisationRequetePreparee(connection, SQL_SELECT_GAMES_25_BEST_GAMES, false);
+	        resultSet = preparedStatement.executeQuery();
+	        
+	        
+	        
+	        // Retrieve cosmetics
+	        
+	        /* Parcours de la ligne de données de l'éventuel ResulSet retourné */
+	        if(resultSet.next()) {
+	        	System.out.println("game n : " +resultSet.getInt("id"));
+	        	
+	       	    game.setScore(150);
+	    	    
+	    	    preparedStatementPlayers = initialisationRequetePreparee(connection, SQL_SELECT_GAME_PLAYERS, false, resultSet.getInt("id"));
+	        	resultSetPlayers = preparedStatement.executeQuery();
+	    	    
+	        	if(resultSetPlayers.next()) {
+	        		User user = new User();
+	        		user.setUsername("test");
+	        		players.add(user);	        		
+	        	}
+	        	
+	    	    game.setUsers(players);
+	    	    
+	    	    games.add(game);
 	        }
 	    } catch ( SQLException e ) {
 	        throw new DAOException( e );
