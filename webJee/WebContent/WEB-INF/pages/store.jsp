@@ -24,7 +24,6 @@
 	
 	<%		  
 		String buy = (String) request.getAttribute("buy");
-	    	    
 	    JSONParser parser = new JSONParser();
 	    String attribut = (String) request.getAttribute("cosmetics");
 	   

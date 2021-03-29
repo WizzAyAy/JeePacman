@@ -18,53 +18,11 @@
 	<%@ page import="java.util.Iterator"  %>
 	
 	<%		    
-	    JSONArray games = new JSONArray();
+	
+		JSONParser parser = new JSONParser();
+	    String attribut = (String) request.getAttribute("myGames");
+	    JSONArray games = (JSONArray) parser.parse(attribut);
 	    
-	    JSONObject game1 = new JSONObject();
-	    JSONObject game2 = new JSONObject();
-	    
-	    JSONArray players1 = new JSONArray();
-	    JSONArray players2 = new JSONArray();
-	    
-	    JSONObject player1 = new JSONObject();
-	    JSONObject player2 = new JSONObject();
-	    
-	    player1.put("username", "WizzAy");
-	    player1.put("id", "10");
-	    
-	    player2.put("username", "bob");
-	    player2.put("id", "1010");
-	    
-	    players1.add(player1);
-	    
-	    players2.add(player2);
-	    players2.add(player1);
-	    
-	    
-	    game1.put("players", players1);
-	    game1.put("score", "1000");
-	    game1.put("id", "game1");
-	    
-	    game2.put("players", players2);
-	    game2.put("score", "20220");
-	    game2.put("id", "game2");
-	    
-	    games.add(game1);
-	    games.add(game2);
-	    games.add(game2);
-	    games.add(game2);
-	    games.add(game2);
-	    games.add(game2);
-	    games.add(game2);
-	    games.add(game2);
-	    games.add(game2);
-	    games.add(game2);
-	    games.add(game2);
-	    games.add(game2);
-	    games.add(game2);
-	  
-	    
-
 	    out.print("<table class=\"styled-table\">");
 	    out.print("<thead>");
 	    out.print("<tr> <th>Score</th> <th>Player</th> </tr>");
@@ -76,13 +34,14 @@
         int i = 0;
         while (itGames.hasNext()) {
         	JSONObject tmpGame = (JSONObject) games.get(i);
+        	
         	out.print("<tr>");
 	            out.print("<td>");
 	            out.println(tmpGame.get("score"));
 	            out.print("</td>");
 	            
 	            //recuperation des joueurs de la game i
-	            JSONArray players = (JSONArray) tmpGame.get("players");
+	            JSONArray players = (JSONArray) tmpGame.get("users");
 	            Iterator<String> itplayers = players.iterator();
 	            //affichade des players
 	            int j = 0;
@@ -99,8 +58,9 @@
 	            }
 	            out.print("</td>");
 	            
-	    	    
+	    	 
     	    out.print("</tr>");
+    	    
     	    itGames.next();
     	    i++;
         }

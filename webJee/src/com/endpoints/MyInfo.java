@@ -19,7 +19,6 @@ import com.mysql.cj.Session;
 public class MyInfo extends HttpServlet  {
 	
 	public static final String CONF_DAO_FACTORY = "daofactory";
-	
 	private PlayerDAOImpl playerDao;
 	
 	public void init() throws ServletException {
@@ -29,8 +28,6 @@ public class MyInfo extends HttpServlet  {
 	
 	public void doGet( HttpServletRequest request, HttpServletResponse response )	throws ServletException, IOException {
 		
-		
-		//User player = playerDao.read(request.getAttribute("pseudo").toString());
 		HttpSession session = request.getSession();
 		User player = playerDao.read(session.getAttribute("token").toString());
 		String json = new Gson().toJson(player);
@@ -39,7 +36,7 @@ public class MyInfo extends HttpServlet  {
 	    response.setStatus(200);
 	    response.getWriter().write(json);
 	    
-		request.setAttribute( "json", json );
+		request.setAttribute( "myInfo", json );
 		
 		this.getServletContext().getRequestDispatcher( "/WEB-INF/pages/myInfo.jsp" ).forward( request, response );
 	}

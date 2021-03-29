@@ -21,6 +21,8 @@ public class GamesDAOImpl implements GamesDAO{
 	// SQL querries
 		private static final String SQL_SELECT_GAME = "SELECT * from Games WHERE id=?";
 		
+		private static final String SQL_SELECT_GAMES_PLAYER = "SELECT * FROM GamePlayers WHERE idPlayer=(SELECT id FROM Player WHERE token=?)";
+		
 		private static final String SQL_CREATE_GAME = "INSERT INTO Games (score) VALUES (?)";
 		private static final String SQL_ADD_GAME_PLAYERS = "INSERT INTO GamePlayers (idGame, idPlayer) VALUES (?, (SELECT id FROM Player WHERE token=?))";
 		
@@ -125,6 +127,52 @@ public class GamesDAOImpl implements GamesDAO{
 		
 		return game;
 	}
+	
+	public ArrayList<Game> readGame(String token) throws DAOException {
+		//pas tres propre et on a qu'une partie des parties jouées
+		Connection connection = null;
+	    PreparedStatement preparedStatement = null;
+	    PreparedStatement preparedStatementScore = null;
+	    ResultSet resultSet = null;
+	    ResultSet resultSetScore = null;
+	    Game game = new Game();
+	    ArrayList<Game> games = new ArrayList<Game>();
+	    System.out.println("===readGame===");
+	    
+	    try {
+	        /* Récupération d'une connexion depuis la Factory */
+	        connection = daoFactory.getConnection();
+	        
+	        // Retrieve user data from database
+	        preparedStatement = initialisationRequetePreparee(connection, SQL_SELECT_GAMES_PLAYER, false, token);
+	        resultSet = preparedStatement.executeQuery();
+	        System.out.println("idgame : " + resultSet.findColumn("idGame"));
+	        preparedStatementScore= initialisationRequetePreparee(connection, SQL_SELECT_GAME, false, resultSet.findColumn("idGame"));
+	        resultSetScore = preparedStatementScore.executeQuery();
+	        System.out.println("score : "+resultSetScore.findColumn("score"));
+	        
+	        // Retrieve cosmetics 
+	        ArrayList<User> players = daoFactory.getPlayerDao().readGamePlayers(resultSet.findColumn("idGame"));
+	        System.out.println(players.size());
+	        /* Parcours de la ligne de données de l'éventuel ResulSet retourné */
+	        if(resultSet.next()) {
+	        	
+	    	    game.setId(resultSet.getInt("idGame") );
+	    	    game.setScore(123);
+	    	    game.setUsers(players);
+	    	    
+	    	    games.add(game);
+	    	    
+	        }
+	    } catch ( SQLException e ) {
+	        throw new DAOException( e );
+	    } finally {
+	        closeAll(resultSet, preparedStatement, connection);
+	    }
+
+		
+		return games;
+	}
 
 	// Useless as we won't change the score nor the players of a game already played
 	@Override
@@ -161,7 +209,7 @@ public class GamesDAOImpl implements GamesDAO{
 	private static Game map(ResultSet resultSet, ArrayList<User> players) throws SQLException {
 		
 	    Game game = new Game();
-	    game.setId(resultSet.getInt("id") );
+	    game.setId(resultSet.getInt("idGame") );
 	    game.setScore(resultSet.getInt("score"));
 	    game.setUsers(players);
 	    

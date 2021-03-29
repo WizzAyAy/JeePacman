@@ -20,9 +20,7 @@
 	<%
 	
 		JSONParser parser = new JSONParser();
-	    String attribut = (String) request.getAttribute("json");
-	    
-	    
+	    String attribut = (String) request.getAttribute("myInfo");
 	    JSONObject jsonObject = (JSONObject) parser.parse(attribut);
    			    
 	    out.print("<table class=\"styled-table\">");

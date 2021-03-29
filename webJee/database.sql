@@ -75,6 +75,7 @@ INSERT into Cosmetics (price, name) VALUES (0.20,'safari mesh');
 INSERT into Games (score) VALUES (31541);
 INSERT into Games (score) VALUES (0);
 INSERT into Games (score) VALUES (69420);
+
 	
 	# Player cosmetics
 INSERT into PlayerCosmetics (idCosmetic, idPlayer) VALUES (1,1);
