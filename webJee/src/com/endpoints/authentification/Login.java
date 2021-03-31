@@ -45,13 +45,15 @@ public class Login extends HttpServlet {
         this.getServletContext().getRequestDispatcher( VUE ).forward( request, response );
     }
 
-    public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-    	System.out.println(request.getHeader("origin"));
-    	        	
-    	if(request.getHeader("origin").equals("http://localhost:8080")) {
+    public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException { 	
+    	String body = Utilities.getBody(request);
+    	System.out.println("login App body : "+body);
+    	
+    	if(request.getHeader("origin") != null && request.getHeader("origin").equals("http://localhost:8080")) {
         	loginWeb(request, response);
         }
-    	if(request.getHeader("origin").equals("appPacman")) {
+    	
+    	if(request.getAttribute("origin") != null && request.getAttribute("origin").equals("appPacman")) {
         	try {
 				loginApp(request, response);
 			} catch (ServletException | IOException | ParseException e) {
@@ -123,7 +125,7 @@ public class Login extends HttpServlet {
     
     public void loginApp( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException, ParseException {
     	String body = Utilities.getBody(request);
-    	System.out.println(body);
+    	System.out.println("login App body : "+body);
     	
     	JSONParser parser = new JSONParser();
 	    JSONObject ids = (JSONObject) parser.parse(body);
