@@ -164,11 +164,9 @@ public class Login extends HttpServlet {
         	request.setAttribute("cosmetics", tmp);
         	
         	response.setStatus(200);   
-        	System.out.println("oui");
         	
         } else {
         	response.setStatus(401);
-        	System.out.println("non");
         }
 
     	

@@ -64,17 +64,46 @@ INSERT Into Player (email, password, pseudo) VALUES ('bob@random.com', MD5('Some
 INSERT Into Player (email, password, pseudo) VALUES ('alice@random.com', MD5('SomethingNormallyHashedInFront'), 'alice');
 
 	# Cosmetics
-INSERT into Cosmetics (price, name) VALUES (28.00,'Spocks ears');
-INSERT into Cosmetics (price, name) VALUES (24.99,'Top Hat');
-INSERT into Cosmetics (price, name) VALUES (100,'Assiimov skin');
-INSERT into Cosmetics (price, name) VALUES (2000,'Dragon lord');
-INSERT into Cosmetics (price, name) VALUES (850,'fire serpent');
-INSERT into Cosmetics (price, name) VALUES (0.20,'safari mesh');
+INSERT into Cosmetics (price, name) VALUES (2.00,'Black Walls');
+INSERT into Cosmetics (price, name) VALUES (2.00,'Blue Walls');
+INSERT into Cosmetics (price, name) VALUES (2.00,'Red Walls');
+INSERT into Cosmetics (price, name) VALUES (2.00,'Yellow Walls');
+INSERT into Cosmetics (price, name) VALUES (2.00,'Green Walls');
+INSERT into Cosmetics (price, name) VALUES (5.00,'Silver Walls');
+INSERT into Cosmetics (price, name) VALUES (15.00,'Gold Walls');
+INSERT into Cosmetics (price, name) VALUES (150.00,'Diamond Walls');
+
+INSERT into Cosmetics (price, name) VALUES (2.00,'Black Floor');
+INSERT into Cosmetics (price, name) VALUES (2.00,'Blue Floor');
+INSERT into Cosmetics (price, name) VALUES (2.00,'Red Floor');
+INSERT into Cosmetics (price, name) VALUES (2.00,'Yellow Floor');
+INSERT into Cosmetics (price, name) VALUES (2.00,'Green Floor');
+INSERT into Cosmetics (price, name) VALUES (5.00,'Silver Floor');
+INSERT into Cosmetics (price, name) VALUES (15.00,'Gold Floor');
+INSERT into Cosmetics (price, name) VALUES (150.00,'Diamond Floor');
+
+INSERT into Cosmetics (price, name) VALUES (2.00,'Black PacMan s Skin');
+INSERT into Cosmetics (price, name) VALUES (2.00,'Blue PacMan s Skin');
+INSERT into Cosmetics (price, name) VALUES (2.00,'Red PacMan s Skin');
+INSERT into Cosmetics (price, name) VALUES (2.00,'Yellow PacMan s Skin');
+INSERT into Cosmetics (price, name) VALUES (2.00,'Green PacMan s Skin');
+INSERT into Cosmetics (price, name) VALUES (5.00,'Silver PacMan s Skin');
+INSERT into Cosmetics (price, name) VALUES (15.00,'Gold PacMan s Skin');
+INSERT into Cosmetics (price, name) VALUES (150.00,'Diamond PacMan s Skin');
+
+INSERT into Cosmetics (price, name) VALUES (2.00,'Black PacMans s Eyes');
+INSERT into Cosmetics (price, name) VALUES (2.00,'Blue PacMan s Eyes');
+INSERT into Cosmetics (price, name) VALUES (2.00,'Red PacMan s Eyes');
+INSERT into Cosmetics (price, name) VALUES (2.00,'Yellow PacMan s Eyes');
+INSERT into Cosmetics (price, name) VALUES (2.00,'Green PacMan s Eyes');
+INSERT into Cosmetics (price, name) VALUES (5.00,'Silver PacMan s Eyes');
+INSERT into Cosmetics (price, name) VALUES (15.00,'Gold PacMan s Eyes');
+INSERT into Cosmetics (price, name) VALUES (150.00,'Diamond PacMan s Eyes');
+
 
 # Games
 INSERT into Games (score) VALUES (31541);
 INSERT into Games (score) VALUES (0);
-INSERT into Games (score) VALUES (69420);
 
 	
 	# Player cosmetics
@@ -85,4 +114,3 @@ INSERT into PlayerCosmetics (idCosmetic, idPlayer) VALUES (2,1);
 INSERT into GamePlayers (idGame, idPlayer) VALUES (1,1);
 INSERT into GamePlayers (idGame, idPlayer) VALUES (1,2);
 INSERT into GamePlayers (idGame, idPlayer) VALUES (2,1);
-INSERT into GamePlayers (idGame, idPlayer) VALUES (3,2);
