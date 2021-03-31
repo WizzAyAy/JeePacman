@@ -21,7 +21,7 @@ public class GamesDAOImpl implements GamesDAO{
 	// SQL querries
 		private static final String SQL_SELECT_GAME = "SELECT * from Games WHERE id=?";
 		
-		private static final String SQL_SELECT_GAMES_PLAYER = "SELECT * FROM GamePlayers WHERE idPlayer=(SELECT id FROM Player WHERE token=?)";
+		private static final String SQL_SELECT_GAMES_PLAYER = "SELECT * from Games WHERE id in (SELECT idGame FROM GamePlayers WHERE idPlayer=(SELECT id FROM Player WHERE token=?))";
 		
 		private static final String SQL_SELECT_GAMES_25_BEST_GAMES = "select * from Games ORDER BY score DESC LIMIT 25";
 
@@ -138,39 +138,30 @@ public class GamesDAOImpl implements GamesDAO{
 	public ArrayList<Game> readGame(String token) throws DAOException {
 		//pas tres propre et on a qu'une partie des parties jouées
 		Connection connection = null;
+		
 	    PreparedStatement preparedStatement = null;
-	    PreparedStatement preparedStatementScore = null;
 	    ResultSet resultSet = null;
-	    ResultSet resultSetScore = null;
+	    
 	    Game game = new Game();
 	    ArrayList<Game> games = new ArrayList<Game>();
+	    
 	    System.out.println("===readGame===");
 	    
 	    try {
-	        /* Récupération d'une connexion depuis la Factory */
+	    	/* Récupération d'une connexion depuis la Factory */
 	        connection = daoFactory.getConnection();
 	        
 	        // Retrieve user data from database
 	        preparedStatement = initialisationRequetePreparee(connection, SQL_SELECT_GAMES_PLAYER, false, token);
 	        resultSet = preparedStatement.executeQuery();
-	        System.out.println("idgame : " + resultSet.findColumn("idGame"));
-	        preparedStatementScore= initialisationRequetePreparee(connection, SQL_SELECT_GAME, false, resultSet.getInt("idGame"));
-	        resultSetScore = preparedStatementScore.executeQuery();
-	        System.out.println("score : "+resultSetScore.findColumn("score"));
 	        
-	        // Retrieve cosmetics 
-	        ArrayList<User> players = daoFactory.getPlayerDao().readGamePlayers(resultSet.getInt("idGame"));
-	        System.out.println(players.size());
-	        /* Parcours de la ligne de données de l'éventuel ResulSet retourné */
 	        if(resultSet.next()) {
-	        	
-	    	    game.setId(resultSet.getInt("idGame") );
-	    	    game.setScore(123);
-	    	    game.setUsers(players);
+	        	ArrayList<User> players = daoFactory.getPlayerDao().readGamePlayers(resultSet.getInt("id"));
+	        	game = map(resultSet, players);
 	    	    
 	    	    games.add(game);
-	    	    
-	        }
+	        }	    	    
+	        
 	    } catch ( SQLException e ) {
 	        throw new DAOException( e );
 	    } finally {
@@ -267,7 +258,7 @@ public class GamesDAOImpl implements GamesDAO{
 	private static Game map(ResultSet resultSet, ArrayList<User> players) throws SQLException {
 		
 	    Game game = new Game();
-	    game.setId(resultSet.getInt("idGame") );
+	    game.setId(resultSet.getInt("id") );
 	    game.setScore(resultSet.getInt("score"));
 	    game.setUsers(players);
 	    
