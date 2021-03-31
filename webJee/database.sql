@@ -82,23 +82,23 @@ INSERT into Cosmetics (price, name) VALUES (5.00,'Silver Floor');
 INSERT into Cosmetics (price, name) VALUES (15.00,'Gold Floor');
 INSERT into Cosmetics (price, name) VALUES (150.00,'Diamond Floor');
 
-INSERT into Cosmetics (price, name) VALUES (2.00,'Black PacMan s Skin');
-INSERT into Cosmetics (price, name) VALUES (2.00,'Blue PacMan s Skin');
-INSERT into Cosmetics (price, name) VALUES (2.00,'Red PacMan s Skin');
-INSERT into Cosmetics (price, name) VALUES (2.00,'Yellow PacMan s Skin');
-INSERT into Cosmetics (price, name) VALUES (2.00,'Green PacMan s Skin');
-INSERT into Cosmetics (price, name) VALUES (5.00,'Silver PacMan s Skin');
-INSERT into Cosmetics (price, name) VALUES (15.00,'Gold PacMan s Skin');
-INSERT into Cosmetics (price, name) VALUES (150.00,'Diamond PacMan s Skin');
+INSERT into Cosmetics (price, name) VALUES (2.00,'Black Skin');
+INSERT into Cosmetics (price, name) VALUES (2.00,'Blue Skin');
+INSERT into Cosmetics (price, name) VALUES (2.00,'Red Skin');
+INSERT into Cosmetics (price, name) VALUES (2.00,'Yellow Skin');
+INSERT into Cosmetics (price, name) VALUES (2.00,'Green Skin');
+INSERT into Cosmetics (price, name) VALUES (5.00,'Silver Skin');
+INSERT into Cosmetics (price, name) VALUES (15.00,'Gold Skin');
+INSERT into Cosmetics (price, name) VALUES (150.00,'Diamond Skin');
 
-INSERT into Cosmetics (price, name) VALUES (2.00,'Black PacMans s Eyes');
-INSERT into Cosmetics (price, name) VALUES (2.00,'Blue PacMan s Eyes');
-INSERT into Cosmetics (price, name) VALUES (2.00,'Red PacMan s Eyes');
-INSERT into Cosmetics (price, name) VALUES (2.00,'Yellow PacMan s Eyes');
-INSERT into Cosmetics (price, name) VALUES (2.00,'Green PacMan s Eyes');
-INSERT into Cosmetics (price, name) VALUES (5.00,'Silver PacMan s Eyes');
-INSERT into Cosmetics (price, name) VALUES (15.00,'Gold PacMan s Eyes');
-INSERT into Cosmetics (price, name) VALUES (150.00,'Diamond PacMan s Eyes');
+INSERT into Cosmetics (price, name) VALUES (2.00,'Black Eyes');
+INSERT into Cosmetics (price, name) VALUES (2.00,'Blue Eyes');
+INSERT into Cosmetics (price, name) VALUES (2.00,'Red Eyes');
+INSERT into Cosmetics (price, name) VALUES (2.00,'Yellow Eyes');
+INSERT into Cosmetics (price, name) VALUES (2.00,'Green Eyes');
+INSERT into Cosmetics (price, name) VALUES (5.00,'Silver Eyes');
+INSERT into Cosmetics (price, name) VALUES (15.00,'Gold Eyes');
+INSERT into Cosmetics (price, name) VALUES (150.00,'Diamond Eyes');
 
 
 # Games
