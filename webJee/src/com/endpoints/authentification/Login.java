@@ -45,16 +45,10 @@ public class Login extends HttpServlet {
         this.getServletContext().getRequestDispatcher( VUE ).forward( request, response );
     }
 
-    public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException { 	
-        	
-    	String body = Utilities.getBody(request);
-    	System.out.println("login App body : "+body);
-    	
-    	if(request.getHeader("origin") != null && request.getHeader("origin").equals("http://localhost:8080")) {
+    public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {	
+    	if(request.getHeader("origin") != null && request.getHeader("origin").equals(request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort())) {
         	loginWeb(request, response);
-        }
-    	
-    	if(request.getAttribute("origin") != null && request.getAttribute("origin").equals("appPacman")) {
+        }else {
         	try {
 				loginApp(request, response);
 			} catch (ServletException | IOException | ParseException e) {
@@ -126,8 +120,7 @@ public class Login extends HttpServlet {
     
     public void loginApp( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException, ParseException {
     	String body = Utilities.getBody(request);
-    	System.out.println("login App body : "+body);
-    	
+
     	JSONParser parser = new JSONParser();
 	    JSONObject ids = (JSONObject) parser.parse(body);
 	    
@@ -138,8 +131,6 @@ public class Login extends HttpServlet {
         HttpSession session = request.getSession();
         
         PlayerDAOImpl playerDao = ((DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY )).getPlayerDao();
-        System.out.println(ids.get("email"));
-        System.out.println(ids.get("motdepasse"));
         
         if (playerDao.goodIds(ids.get("email").toString(), ids.get("motdepasse").toString())) {
         	String token = Utilities.generateNewToken();
@@ -166,7 +157,7 @@ public class Login extends HttpServlet {
         	//cosmetics sous la forme "Black Walls, Silver Floor, Gold PacMan s Skin, Diamond PacMan s Eyes"
         	request.setAttribute("cosmetics", tmp);
         	request.setAttribute("token", token);
-        	
+
         	response.setStatus(200);   
         	
         } else {
