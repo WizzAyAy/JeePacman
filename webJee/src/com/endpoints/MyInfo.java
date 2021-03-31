@@ -29,14 +29,17 @@ public class MyInfo extends HttpServlet  {
 	public void doGet( HttpServletRequest request, HttpServletResponse response )	throws ServletException, IOException {
 		
 		HttpSession session = request.getSession();
-		User player = playerDao.read(session.getAttribute("token").toString());
-		String json = new Gson().toJson(player);
-	    response.setContentType("application/json");
-	    response.setCharacterEncoding("UTF-8");
-	    response.setStatus(200);
-	    response.getWriter().write(json);
-	    
-		request.setAttribute( "myInfo", json );
+		Object token = session.getAttribute("token");
+		if(token != null) {		
+			User player = playerDao.read(token.toString());
+			String json = new Gson().toJson(player);
+		    response.setContentType("application/json");
+		    response.setCharacterEncoding("UTF-8");
+		    response.setStatus(200);
+		    response.getWriter().write(json);
+		    
+			request.setAttribute( "myInfo", json );
+		}
 		
 		this.getServletContext().getRequestDispatcher( "/WEB-INF/pages/myInfo.jsp" ).forward( request, response );
 	}

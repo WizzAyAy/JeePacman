@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import com.bean.User;
 import com.dao.DAOFactory;
 import com.dao.PlayerDAOImpl;
+import com.endpoints.Utilities;
 import com.modele.ConnexionForm;
 import com.modele.CreationForm;
 
@@ -78,9 +79,9 @@ public class Signin extends HttpServlet {
 
         /*si aucune erreur on retourne sur la page d'acceuil, si erreur alors on reste sur la page de creation du compte*/
         if ( form.getErreurs().isEmpty() ) {
-        	String token = TokenGen.generateNewToken();
+        	String token = Utilities.generateNewToken();
         	session.setAttribute(ATT_TOKEN, token);
-        	session.setAttribute("email", request.getParameter( "email" ));
+        	
         	//mettre en bdd le token de la session + cree l'user
         	User user = new User();
         	user.setEmail(request.getParameter( "email" ));

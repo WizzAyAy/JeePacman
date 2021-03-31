@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -20,6 +21,7 @@ import org.json.simple.parser.ParseException;
 import com.bean.User;
 import com.dao.DAOFactory;
 import com.dao.PlayerDAOImpl;
+import com.endpoints.Utilities;
 import com.google.gson.Gson;
 import com.modele.ConnexionForm;
 
@@ -98,17 +100,19 @@ public class Login extends HttpServlet {
 
         /*si aucune erreur on retourne sur la page d'acceuil, si erreur alors on reste sur la page de connection*/
         if ( form.getErreurs().isEmpty() ) {
-        	String token = TokenGen.generateNewToken();
+        	String token = Utilities.generateNewToken();
         	session.setAttribute(ATT_TOKEN, token);
-        	session.setAttribute("email", request.getParameter( "email" ));
+        	
         	//mettre en bdd le token de la session
         	User user = new User();
         	user.setEmail(request.getParameter( "email" ));
         	user.setPassword(request.getParameter( "motdepasse" ));
         	user.setToken(token);
-        	
         	playerDao.updateToken(user);
-
+        	
+        	User userTpm = playerDao.read(token);    
+        	String username = userTpm.getUsername();
+        	session.setAttribute("username", username);
         	
         	this.getServletContext().getRequestDispatcher( VUE_SUCCES ).forward( request, response );        	
         	
@@ -118,7 +122,7 @@ public class Login extends HttpServlet {
     }
     
     public void loginApp( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException, ParseException {
-    	String body = getBody(request);
+    	String body = Utilities.getBody(request);
     	System.out.println(body);
     	
     	JSONParser parser = new JSONParser();
@@ -135,7 +139,7 @@ public class Login extends HttpServlet {
         System.out.println(ids.get("motdepasse"));
         
         if (playerDao.goodIds(ids.get("email").toString(), ids.get("motdepasse").toString())) {
-        	String token = TokenGen.generateNewToken();
+        	String token = Utilities.generateNewToken();
         	session.setAttribute(ATT_TOKEN, token);
 
         	//mettre en bdd le token de la session
@@ -146,6 +150,19 @@ public class Login extends HttpServlet {
         	
         	playerDao.updateToken(user);
 
+        	User userTpm = playerDao.read(token);
+        	String tmp = "";
+
+        	for(int i = 0; i < userTpm.getComestics().size() ; i++) {
+        		tmp += userTpm.getComestics().get(i).getName();
+        		if( i != userTpm.getComestics().size() - 1) {
+        			tmp += ", ";
+        		}
+        	}
+
+        	//cosmetics sous la forme "Black Walls, Silver Floor, Gold PacMan s Skin, Diamond PacMan s Eyes"
+        	request.setAttribute("cosmetics", tmp);
+        	
         	response.setStatus(200);   
         	System.out.println("oui");
         	
@@ -156,41 +173,5 @@ public class Login extends HttpServlet {
 
     	
     }
-    
-    public static String getBody(HttpServletRequest request) throws IOException {
-
-        String body = null;
-        StringBuilder stringBuilder = new StringBuilder();
-        BufferedReader bufferedReader = null;
-
-        try {
-            InputStream inputStream = request.getInputStream();
-            if (inputStream != null) {
-                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                char[] charBuffer = new char[128];
-                int bytesRead = -1;
-                while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
-                    stringBuilder.append(charBuffer, 0, bytesRead);
-                }
-            } else {
-                stringBuilder.append("");
-            }
-        } catch (IOException ex) {
-            throw ex;
-        } finally {
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close();
-                } catch (IOException ex) {
-                    throw ex;
-                }
-            }
-        }
-
-        body = stringBuilder.toString();
-        return body;
-    }
-
-    
     
 }

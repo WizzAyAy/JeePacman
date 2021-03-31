@@ -9,6 +9,11 @@
 	<style type="text/css"><%@include file="../css/table.css" %></style>
 </head>
 <body>
+
+<c:if test="${empty sessionScope.sessionUtilisateur}">
+		<%@ include file="../pages/notAuthorize.jsp" %>
+</c:if>
+<c:if test="${!empty sessionScope.sessionUtilisateur}">
 	<%@ include file="../components/header.jsp" %>	
 		
 	<div class="center">
@@ -70,7 +75,7 @@
 	    
 	%>
 	</div>
-	
+	</c:if>
 	
 </body>
 </html>

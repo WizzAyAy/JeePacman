@@ -14,6 +14,12 @@
 	</style>
 </head>
 <body>
+
+<c:if test="${empty sessionScope.sessionUtilisateur}">
+		<%@ include file="../pages/notAuthorize.jsp" %>
+</c:if>
+<c:if test="${!empty sessionScope.sessionUtilisateur}">
+
 	<%@ include file="../components/header.jsp" %>	
 		
 	<div class="center">
@@ -63,7 +69,7 @@
 	    		       	
 	       	out.print("<tr>");
 		     	out.println("<td>" + name + "</td>");
-		     	out.println("<td>" + price + "</td>");
+		     	out.println("<td>" + price + " €</td>");
 				out.println("<td><form method=\"POST\" action=\"/webJee/store\">");
 				out.println("<input name=\"idCosmetic\" type=\"hidden\" value=" + id + ">");
 				out.println("<input class=\"buy\" type=\"submit\" value=\"Buy me!!!\"></form></td>");
@@ -87,6 +93,6 @@
 	if(buyed != null)
 		out.print("<p>" + buyed.toString()  + "</p>");
 	%>
-	
+</c:if>
 </body>
 </html>

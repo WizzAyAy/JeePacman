@@ -33,20 +33,20 @@ public class Store extends HttpServlet  {
 		/* Récupération de la session depuis la requête */
         HttpSession session = request.getSession();
         
-        
+        Object token = session.getAttribute("token");
         /* 	FAIRE LA REQUETE POUR RECUP TOUS LES COSMETICS SAUF CEUX DE LA TABLE PLAYERS*/
-        ArrayList<Cosmetic> cosmetics = cosmeticDao.readPlayerNotCosmetics(session.getAttribute("token").toString());
-		String json = new Gson().toJson(cosmetics);
-	    response.setContentType("application/json");
-	    response.setCharacterEncoding("UTF-8");
-	    response.setStatus(200);
-	    response.getWriter().write(json);
-		request.setAttribute( "cosmetics", json );
-        
-        /* 	mettre la reponse de la req sql dans la session */
-        session.setAttribute( "jsonCosmetic", null );
-  
-		
+        if(token != null) {
+	        ArrayList<Cosmetic> cosmetics = cosmeticDao.readPlayerNotCosmetics(token.toString());
+			String json = new Gson().toJson(cosmetics);
+		    response.setContentType("application/json");
+		    response.setCharacterEncoding("UTF-8");
+		    response.setStatus(200);
+		    response.getWriter().write(json);
+			request.setAttribute( "cosmetics", json );
+	        
+	        /* 	mettre la reponse de la req sql dans la session */
+	        session.setAttribute( "jsonCosmetic", null );
+        }
 		this.getServletContext().getRequestDispatcher( "/WEB-INF/pages/store.jsp" ).forward( request, response );
 	}
 	

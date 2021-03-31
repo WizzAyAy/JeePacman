@@ -3,7 +3,7 @@ package com.bean;
 import java.util.ArrayList;
 
 public class Game {
-	private ArrayList<User> users;
+	private ArrayList<User> users = new ArrayList<User>();
 	private int score;
 	private int id;
 	
@@ -13,6 +13,10 @@ public class Game {
 	}
 	public void setUsers(ArrayList<User> users) {
 		this.users = users;
+	}
+	
+	public void addUser(User user) {
+		users.add(user);
 	}
 	public int getScore() {
 		return score;

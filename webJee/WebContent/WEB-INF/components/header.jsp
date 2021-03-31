@@ -18,7 +18,8 @@
 			  <a href="/webJee/myinfo">Mes infos</a>
 			  <a href="/webJee/store">Store</a>
 			  <a href="/webJee/leaderboard">LeaderBoard</a>
-		      <a href="/webJee/logout" class="logout">Logout from ${sessionScope.sessionUtilisateur.email}</a>   
+		      <a href="/webJee/logout" class="logout">Logout from <% out.println(session.getAttribute("username")); %></a>   
   		</div>
 	</c:if>
+	
 </div>

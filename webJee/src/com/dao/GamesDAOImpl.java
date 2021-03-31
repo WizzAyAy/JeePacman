@@ -29,7 +29,7 @@ public class GamesDAOImpl implements GamesDAO{
 		
 		private static final String SQL_CREATE_GAME = "INSERT INTO Games (score) VALUES (?)";
 		
-		private static final String SQL_ADD_GAME_PLAYERS = "INSERT INTO GamePlayers (idGame, idPlayer) VALUES (?, (SELECT id FROM Player WHERE token=?))";
+		private static final String SQL_ADD_GAME_PLAYERS = "INSERT INTO GamePlayers (idGame, idPlayer) VALUES (?, (SELECT id FROM Player WHERE pseudo=?))";
 		
 		// Useless as we won't change the score nor the players of a game already played
 		//private static final String SQL_UPDATE_GAME = "UPDATE Games SET score=? WHERE id=?";
@@ -69,7 +69,7 @@ public class GamesDAOImpl implements GamesDAO{
 	        
 	        for(User p : game.getUsers())
 	        {
-	        	addPlayerToGame(game.getId(), p.getToken());
+	        	addPlayerToGame(game.getId(), p.getUsername());
 	        }
 	        
 	    } catch (SQLException e) {
@@ -80,7 +80,7 @@ public class GamesDAOImpl implements GamesDAO{
 		
 	}
 	
-	public void addPlayerToGame(int idGame, String playerToken)
+	public void addPlayerToGame(int idGame, String playerName)
 	{
 		Connection connection = null;
 	    PreparedStatement preparedStatement = null;
@@ -89,7 +89,7 @@ public class GamesDAOImpl implements GamesDAO{
 	    try {
 	        /* Récupération d'une connexion depuis la Factory */
 	    	connection = daoFactory.getConnection();
-	        preparedStatement = initialisationRequetePreparee(connection, SQL_ADD_GAME_PLAYERS, true, idGame, playerToken);
+	        preparedStatement = initialisationRequetePreparee(connection, SQL_ADD_GAME_PLAYERS, true, idGame, playerName);
 	        int statut = preparedStatement.executeUpdate();
 	        /* Analyse du statut retourné par la requête d'insertion */
 	        if (statut == 0) {
@@ -145,8 +145,6 @@ public class GamesDAOImpl implements GamesDAO{
 	    Game game = new Game();
 	    ArrayList<Game> games = new ArrayList<Game>();
 	    
-	    System.out.println("===readGame===");
-	    
 	    try {
 	    	/* Récupération d'une connexion depuis la Factory */
 	        connection = daoFactory.getConnection();
@@ -155,7 +153,7 @@ public class GamesDAOImpl implements GamesDAO{
 	        preparedStatement = initialisationRequetePreparee(connection, SQL_SELECT_GAMES_PLAYER, false, token);
 	        resultSet = preparedStatement.executeQuery();
 	        
-	        while(resultSet.next()) {
+	        if(resultSet.next()) {
 	        	ArrayList<User> players = daoFactory.getPlayerDao().readGamePlayers(resultSet.getInt("id"));
 	        	game = map(resultSet, players);
 	    	    

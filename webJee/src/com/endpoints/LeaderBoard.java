@@ -32,7 +32,6 @@ public class LeaderBoard extends HttpServlet  {
 		ArrayList<Game> games = gamesDao.readBest();
 
 		String json = new Gson().toJson(games);		
-		System.out.println("JSON : " + json);
 			
 	    response.setContentType("application/json");
 	    response.setCharacterEncoding("UTF-8");
