@@ -17,7 +17,7 @@
 			  <a href="/webJee/mygame">Mes parties</a>
 			  <a href="/webJee/myinfo">Mes infos</a>
 			  <a href="/webJee/store">Store</a>
-			  <a href="/webJee/learderboard">LeaderBoard</a>
+			  <a href="/webJee/leaderboard">LeaderBoard</a>
 		      <a href="/webJee/logout" class="logout">Logout from ${sessionScope.sessionUtilisateur.email}</a>   
   		</div>
 	</c:if>

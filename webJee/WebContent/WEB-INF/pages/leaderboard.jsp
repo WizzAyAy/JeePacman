@@ -23,12 +23,9 @@
 	    String attribut = (String) request.getAttribute("LeaderBoard");
 	    JSONArray games = (JSONArray) parser.parse(attribut);
 	    
-	    out.print(games);
-
-
-	    /*out.print("<table class=\"styled-table\">");
+	    out.print("<table class=\"styled-table\">");
 	    out.print("<thead>");
-	    out.print("<tr> <th>Score</th> <th>Player</th> </tr>");
+	    out.print("<tr> <th>Place</th> <th>Score</th> <th>Player</th> </tr>");
 	    out.print("</thead>");
 	    
 	    out.print("<tbody>");
@@ -38,12 +35,15 @@
         while (itGames.hasNext()) {
         	JSONObject tmpGame = (JSONObject) games.get(i);
         	out.print("<tr>");
+	        	out.print("<td>");
+	            out.println(i+1);
+	            out.print("</td>");
 	            out.print("<td>");
 	            out.println(tmpGame.get("score"));
 	            out.print("</td>");
 	            
 	            //recuperation des joueurs de la game i
-	            JSONArray players = (JSONArray) tmpGame.get("players");
+	            JSONArray players = (JSONArray) tmpGame.get("users");
 	            Iterator<String> itplayers = players.iterator();
 	            //affichade des players
 	            int j = 0;
@@ -66,7 +66,7 @@
     	    i++;
         }
         out.print("</tbody>");
-	    out.print("</table>");*/
+	    out.print("</table>");
 	    
 	%>
 	</div>

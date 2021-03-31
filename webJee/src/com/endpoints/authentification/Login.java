@@ -35,7 +35,19 @@ public class Login extends HttpServlet {
     }
 
     public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-        /* Préparation de l'objet formulaire */
+    	System.out.println(request.getHeader("origin"));
+    	
+    	if(request.getHeader("origin").equals("http://localhost:8080")) {
+        	loginWeb(request, response);
+        }
+    	if(request.getHeader("origin").equals("appPacman")) {
+        	loginApp(request, response);
+        }
+    	
+    }
+    
+    public void loginWeb( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
+    	/* Préparation de l'objet formulaire */
         ConnexionForm form = new ConnexionForm();
 
         /* Traitement de la requête et récupération du bean en résultant */
@@ -84,12 +96,48 @@ public class Login extends HttpServlet {
         	playerDao.updateToken(user);
 
         	
-        	
         	this.getServletContext().getRequestDispatcher( VUE_SUCCES ).forward( request, response );        	
         	
         } else {
         	this.getServletContext().getRequestDispatcher( VUE ).forward( request, response );
         }
+    }
+    
+    public void loginApp( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
+    	/* Préparation de l'objet formulaire */
+        ConnexionForm form = new ConnexionForm();
+
+        /* Traitement de la requête et récupération du bean en résultant */
+        User utilisateur = form.connecterUtilisateur( request );
+
+        /* Récupération de la session depuis la requête */
+        HttpSession session = request.getSession();
+        
+        PlayerDAOImpl playerDao = ((DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY )).getPlayerDao();
+
+        if(!playerDao.goodIds(request.getParameter( "email" ), request.getParameter( "motdepasse" ))) {
+        	form.setErreur("goodIds", "mauvais id de connection");
+        }
+        
+        if ( form.getErreurs().isEmpty() ) {
+        	String token = TokenGen.generateNewToken();
+        	session.setAttribute(ATT_TOKEN, token);
+
+        	//mettre en bdd le token de la session
+        	User user = new User();
+        	user.setEmail(request.getParameter( "email" ));
+        	user.setPassword(request.getParameter( "motdepasse" ));
+        	user.setToken(token);
+        	
+        	playerDao.updateToken(user);
+
+        	response.setStatus(200);    	
+        	
+        } else {
+        	response.setStatus(401); 
+        }
+
+    	
     }
     
     

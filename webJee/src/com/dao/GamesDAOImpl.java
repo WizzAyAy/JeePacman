@@ -23,7 +23,7 @@ public class GamesDAOImpl implements GamesDAO{
 		
 		private static final String SQL_SELECT_GAMES_PLAYER = "SELECT * from Games WHERE id in (SELECT idGame FROM GamePlayers WHERE idPlayer=(SELECT id FROM Player WHERE token=?))";
 		
-		private static final String SQL_SELECT_GAMES_25_BEST_GAMES = "select * from Games ORDER BY score DESC LIMIT 25";
+		private static final String SQL_SELECT_GAMES_25_BEST_GAMES = "SELECT * from Games ORDER BY score DESC LIMIT 25";
 
 
 		
@@ -155,7 +155,7 @@ public class GamesDAOImpl implements GamesDAO{
 	        preparedStatement = initialisationRequetePreparee(connection, SQL_SELECT_GAMES_PLAYER, false, token);
 	        resultSet = preparedStatement.executeQuery();
 	        
-	        if(resultSet.next()) {
+	        while(resultSet.next()) {
 	        	ArrayList<User> players = daoFactory.getPlayerDao().readGamePlayers(resultSet.getInt("id"));
 	        	game = map(resultSet, players);
 	    	    
@@ -176,9 +176,7 @@ public class GamesDAOImpl implements GamesDAO{
 		Connection connection = null;
 	    PreparedStatement preparedStatement = null;
 	    ResultSet resultSet = null;
-	    PreparedStatement preparedStatementPlayers = null;
-	    ResultSet resultSetPlayers = null;
-	    ArrayList<User> players = new ArrayList<User>();
+	    
 	    ArrayList<Game> games = new ArrayList<Game>();
 	    Game game = new Game();
 	    
@@ -190,29 +188,11 @@ public class GamesDAOImpl implements GamesDAO{
 	        preparedStatement = initialisationRequetePreparee(connection, SQL_SELECT_GAMES_25_BEST_GAMES, false);
 	        resultSet = preparedStatement.executeQuery();
 	        
-	        
-	        
-	        // Retrieve cosmetics
-	        
-	        /* Parcours de la ligne de données de l'éventuel ResulSet retourné */
-	        if(resultSet.next()) {
-	        	System.out.println("game n : " +resultSet.getInt("id"));
-	        	
-	       	    game.setScore(150);
-	    	    
-	    	    preparedStatementPlayers = initialisationRequetePreparee(connection, SQL_SELECT_GAME_PLAYERS, false, resultSet.getInt("id"));
-	        	resultSetPlayers = preparedStatement.executeQuery();
-	    	    
-	        	if(resultSetPlayers.next()) {
-	        		User user = new User();
-	        		user.setUsername("test");
-	        		players.add(user);	        		
-	        	}
-	        	
-	    	    game.setUsers(players);
-	    	    
+	        while(resultSet.next()) {
+	        	ArrayList<User> players = daoFactory.getPlayerDao().readGamePlayers(resultSet.getInt("id"));
+	        	game = map(resultSet, players);
 	    	    games.add(game);
-	        }
+	        }    
 	    } catch ( SQLException e ) {
 	        throw new DAOException( e );
 	    } finally {
