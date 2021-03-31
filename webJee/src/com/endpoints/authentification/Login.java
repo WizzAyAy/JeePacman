@@ -46,6 +46,7 @@ public class Login extends HttpServlet {
     }
 
     public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException { 	
+        	
     	String body = Utilities.getBody(request);
     	System.out.println("login App body : "+body);
     	
@@ -164,6 +165,7 @@ public class Login extends HttpServlet {
 
         	//cosmetics sous la forme "Black Walls, Silver Floor, Gold PacMan s Skin, Diamond PacMan s Eyes"
         	request.setAttribute("cosmetics", tmp);
+        	request.setAttribute("token", token);
         	
         	response.setStatus(200);   
         	
