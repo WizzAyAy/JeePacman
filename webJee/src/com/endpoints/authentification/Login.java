@@ -1,6 +1,10 @@
 package com.endpoints.authentification;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,9 +13,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import com.bean.User;
 import com.dao.DAOFactory;
 import com.dao.PlayerDAOImpl;
+import com.google.gson.Gson;
 import com.modele.ConnexionForm;
 
 
@@ -36,12 +45,17 @@ public class Login extends HttpServlet {
 
     public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
     	System.out.println(request.getHeader("origin"));
-    	
+    	        	
     	if(request.getHeader("origin").equals("http://localhost:8080")) {
         	loginWeb(request, response);
         }
     	if(request.getHeader("origin").equals("appPacman")) {
-        	loginApp(request, response);
+        	try {
+				loginApp(request, response);
+			} catch (ServletException | IOException | ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
     	
     }
@@ -103,42 +117,80 @@ public class Login extends HttpServlet {
         }
     }
     
-    public void loginApp( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-    	/* Préparation de l'objet formulaire */
-        ConnexionForm form = new ConnexionForm();
-
-        /* Traitement de la requête et récupération du bean en résultant */
-        User utilisateur = form.connecterUtilisateur( request );
-
+    public void loginApp( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException, ParseException {
+    	String body = getBody(request);
+    	System.out.println(body);
+    	
+    	JSONParser parser = new JSONParser();
+	    JSONObject ids = (JSONObject) parser.parse(body);
+	    
+	    System.out.println(ids);
+    	
+  
         /* Récupération de la session depuis la requête */
         HttpSession session = request.getSession();
         
         PlayerDAOImpl playerDao = ((DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY )).getPlayerDao();
-
-        if(!playerDao.goodIds(request.getParameter( "email" ), request.getParameter( "motdepasse" ))) {
-        	form.setErreur("goodIds", "mauvais id de connection");
-        }
+        System.out.println(ids.get("email"));
+        System.out.println(ids.get("motdepasse"));
         
-        if ( form.getErreurs().isEmpty() ) {
+        if (playerDao.goodIds(ids.get("email").toString(), ids.get("motdepasse").toString())) {
         	String token = TokenGen.generateNewToken();
         	session.setAttribute(ATT_TOKEN, token);
 
         	//mettre en bdd le token de la session
         	User user = new User();
-        	user.setEmail(request.getParameter( "email" ));
-        	user.setPassword(request.getParameter( "motdepasse" ));
+        	user.setEmail(ids.get("email").toString());
+        	user.setPassword(ids.get("motdepasse").toString());
         	user.setToken(token);
         	
         	playerDao.updateToken(user);
 
-        	response.setStatus(200);    	
+        	response.setStatus(200);   
+        	System.out.println("oui");
         	
         } else {
-        	response.setStatus(401); 
+        	response.setStatus(401);
+        	System.out.println("non");
         }
 
     	
     }
+    
+    public static String getBody(HttpServletRequest request) throws IOException {
+
+        String body = null;
+        StringBuilder stringBuilder = new StringBuilder();
+        BufferedReader bufferedReader = null;
+
+        try {
+            InputStream inputStream = request.getInputStream();
+            if (inputStream != null) {
+                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                char[] charBuffer = new char[128];
+                int bytesRead = -1;
+                while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
+                    stringBuilder.append(charBuffer, 0, bytesRead);
+                }
+            } else {
+                stringBuilder.append("");
+            }
+        } catch (IOException ex) {
+            throw ex;
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException ex) {
+                    throw ex;
+                }
+            }
+        }
+
+        body = stringBuilder.toString();
+        return body;
+    }
+
     
     
 }
