@@ -22,12 +22,7 @@ public final class ConnexionForm {
         return erreurs;
     }
 
-    public User connecterUtilisateur( HttpServletRequest request ) {
-        /* Récupération des champs du formulaire */
-        String email = getValeurChamp( request, CHAMP_EMAIL );
-        String motDePasse = getValeurChamp( request, CHAMP_PASS );
-
-        User utilisateur = new User();
+    public void connecterUtilisateur(String email, String password) {
 
         /* Validation du champ email. */
         try {
@@ -35,25 +30,19 @@ public final class ConnexionForm {
         } catch ( Exception e ) {
             setErreur( CHAMP_EMAIL, e.getMessage() );
         }
-        utilisateur.setEmail( email );
 
         /* Validation du champ mot de passe. */
         try {
-            validationMotDePasse( motDePasse );
+            validationMotDePasse(password);
         } catch ( Exception e ) {
             setErreur( CHAMP_PASS, e.getMessage() );
         }
-        utilisateur.setPassword( motDePasse );
         
         
         /* Initialisation du résultat global de la validation. */
-        if ( erreurs.isEmpty() ) {
-            resultat = "Échec de la connexion.";
-        } else {
+        if ( !erreurs.isEmpty() ) {
             resultat = "Échec de la connexion.";
         }
-
-        return utilisateur;
     }
 
 	/**

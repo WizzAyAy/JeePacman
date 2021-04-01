@@ -33,17 +33,15 @@ public class MyGame extends HttpServlet  {
         this.gamesDao = ((DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY )).getGamesDao();
     }
 	
-	public void doGet( HttpServletRequest request, HttpServletResponse response )	throws ServletException, IOException {
-		
-		
-		HttpSession session = request.getSession();
-		Object token = session.getAttribute("token");
+	public void doGet( HttpServletRequest request, HttpServletResponse response )	throws ServletException, IOException {	
+		//Object token = session.getAttribute("token");
+		String token = "";
 		if(token != null) {
 			ArrayList<Game> games = gamesDao.readGame(token.toString());
 			String json = new Gson().toJson(games);
 		    response.setContentType("application/json");
 		    response.setCharacterEncoding("UTF-8");
-		    response.setStatus(200);
+		    response.setStatus(200); // OK
 			request.setAttribute( "myGames", json );
 		}
 		
@@ -51,42 +49,9 @@ public class MyGame extends HttpServlet  {
 	}
 	
 	public void doPost(HttpServletRequest request, HttpServletResponse response )	throws ServletException, IOException {
-		String body = Utilities.getBody(request);
-    	System.out.println(body);
-    	
-    	JSONParser parser = new JSONParser();
-	    JSONObject ids = null;
-		try {
-			ids = (JSONObject) parser.parse(body);
-			 
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		System.out.println(ids);
-		
-		Game game = new Game();
-		game.setScore(Integer.parseInt(ids.get("score").toString()));
-		
-		JSONArray users = (JSONArray) ids.get("users");
-		
-		Iterator<String> itUser = users.iterator();
-        int i = 0;
-        
-        while (itUser.hasNext()) {
-        	User u = new User();
-        	JSONObject user = (JSONObject) users.get(i);
-        	
-        	System.out.println(user);
-        	u.setUsername(user.get("pseudo").toString());
-        	game.addUser(u);
-        	
-        	itUser.next();
-     	    i++;
-        }
-		
+		Game game = Utilities.getGameFromBody(request);
+
 		gamesDao.create(game);
-	   
+	    response.setStatus(201); // Created
 	}
 }
