@@ -7,4 +7,5 @@ public interface PlayerDAO {
 	User read(String pseudo) throws DAOException;
 	void updateToken(User player) throws DAOException;
 	void delete(User player) throws DAOException;
+	void update(User player) throws DAOException;
 }

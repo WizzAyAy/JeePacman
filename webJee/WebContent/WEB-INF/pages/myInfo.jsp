@@ -9,10 +9,10 @@
 	<style type="text/css"><%@include file="../css/table.css" %></style>
 	</head>
 <body>
-<c:if test="${empty sessionScope.sessionUtilisateur}">
-		<%@ include file="../pages/notAuthorize.jsp" %>
+<c:if test="${empty requestScope.user}">
+		<%@ include file="../pages/notAuthorized.jsp" %>
 </c:if>
-<c:if test="${!empty sessionScope.sessionUtilisateur}">
+<c:if test="${!empty requestScope.username}">
 	<%@ include file="../components/header.jsp" %>	
 	
 	<div class="center">
@@ -24,7 +24,7 @@
 	<%
 	
 		JSONParser parser = new JSONParser();
-	    String attribut = (String) request.getAttribute("myInfo");
+	    String attribut = (String) request.getAttribute("user");
 	    JSONObject jsonObject = (JSONObject) parser.parse(attribut);
    			    
 	    out.print("<table class=\"styled-table\">");
@@ -70,8 +70,6 @@
     	    out.print("</tr>");
         out.print("</tbody>");
 	    out.print("</table>");
-	    
-	   
 	    
 	%>
 	</div>

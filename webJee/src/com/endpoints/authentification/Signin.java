@@ -15,7 +15,6 @@ import com.dao.DAOFactory;
 import com.dao.PlayerDAOImpl;
 import com.endpoints.Utilities;
 import com.modele.ConnexionForm;
-import com.modele.CreationForm;
 
 @WebServlet( name="Signin", urlPatterns = "/signin" )
 public class Signin extends HttpServlet {
@@ -36,20 +35,15 @@ public class Signin extends HttpServlet {
 
     public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
         /* Préparation de l'objet formulaire */
-        CreationForm form = new CreationForm();
-
-        /* Traitement de la requête et récupération du bean en résultant */
-        User utilisateur = form.connecterUtilisateur( request );
-
-        /* Récupération de la session depuis la requête */
-        HttpSession session = request.getSession();
-
-        /**
-         * Si aucune erreur de validation n'a eu lieu, alors ajout du bean
-         * Utilisateur à la session, sinon suppression du bean de la session.
-         */
+    	ConnexionForm form = new ConnexionForm();
+    	
+    	String email = request.getParameter( "email" );
+    	String password = request.getParameter( "motdepasse" );
+    	String username = request.getParameter( "username" );
         
         playerDao = ((DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY )).getPlayerDao();
+        
+        form.connecterUtilisateur(email, password, username);
 
         if(playerDao.existingUsername(request.getParameter( "username" ))) {
         	form.setErreur("username", "username deja dans la base de données");
@@ -59,42 +53,29 @@ public class Signin extends HttpServlet {
         	form.setErreur("email", "email deja dans la base de données");
         }
         
-        if ( form.getErreurs().isEmpty() ) {
-            session.setAttribute( ATT_SESSION_USER, utilisateur );
-        } else {
-            session.setAttribute( ATT_SESSION_USER, null );
-        }
-
-        /* Stockage du formulaire et du bean dans l'objet request */
-        request.setAttribute( ATT_FORM, form );
-        request.setAttribute( ATT_USER, utilisateur );
-        
-        if ( form.getErreurs().isEmpty() ) {
-            session.setAttribute( ATT_SESSION_USER, utilisateur );
-        } else {
-            session.setAttribute( ATT_SESSION_USER, null );
-        }
-        
-       
-
         /*si aucune erreur on retourne sur la page d'acceuil, si erreur alors on reste sur la page de creation du compte*/
-        if ( form.getErreurs().isEmpty() ) {
+        if (form.getErreurs().isEmpty()) {
         	String token = Utilities.generateNewToken();
-        	session.setAttribute(ATT_TOKEN, token);
         	
         	//mettre en bdd le token de la session + cree l'user
         	User user = new User();
-        	user.setEmail(request.getParameter( "email" ));
-        	user.setPassword(request.getParameter( "motdepasse" ));
-        	user.setUsername(request.getParameter( "username" ));
+        	user.setEmail(email);
+        	user.setPassword(password);
+        	user.setUsername(username);
         	user.setToken(token);
         	playerDao.create(user);
         	
-        	session.setAttribute("username",request.getParameter( "username" ));
+        	// Just adding username to the request to display it on the website
+        	request.setAttribute("username", username);
+        	// Add the username to a cookie to use it later
+        	Utilities.setCookie(response, "username", username, 3600);
         	
-        	
+        	response.setStatus(201); // Created
         	this.getServletContext().getRequestDispatcher( VUE_SUCCES ).forward( request, response );
         } else {
+        	response.setStatus(409); // Already exists (for now I consider it's the only way for it not to work)
+        	
+        	request.setAttribute( ATT_FORM, form );
         	this.getServletContext().getRequestDispatcher( VUE ).forward( request, response );
         }
     }

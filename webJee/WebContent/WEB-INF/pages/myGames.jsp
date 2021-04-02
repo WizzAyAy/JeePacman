@@ -10,10 +10,10 @@
 </head>
 <body>
 
-<c:if test="${empty sessionScope.sessionUtilisateur}">
-		<%@ include file="../pages/notAuthorize.jsp" %>
+<c:if test="${empty requestScope.games}">
+		<%@ include file="../pages/notAuthorized.jsp" %>
 </c:if>
-<c:if test="${!empty sessionScope.sessionUtilisateur}">
+<c:if test="${!empty requestScope.username}">
 	<%@ include file="../components/header.jsp" %>	
 		
 	<div class="center">
@@ -25,7 +25,7 @@
 	<%		    
 	
 		JSONParser parser = new JSONParser();
-	    String attribut = (String) request.getAttribute("myGames");
+	    String attribut = (String) request.getAttribute("games");
 	    JSONArray games = (JSONArray) parser.parse(attribut);
 	    
 	    out.print("<table class=\"styled-table\">");

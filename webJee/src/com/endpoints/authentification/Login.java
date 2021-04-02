@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -63,9 +64,6 @@ public class Login extends HttpServlet {
         	password = u.getPassword();
         }
         
-        /* Traitement de la requête et récupération du bean en résultant */
-        //User utilisateur = form.connecterUtilisateur( request );
-        
         PlayerDAOImpl playerDao = ((DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY )).getPlayerDao();
 
         form.connecterUtilisateur(email, password);
@@ -85,7 +83,17 @@ public class Login extends HttpServlet {
            	if(request.getHeader("origin") != null && 
            			request.getHeader("origin").equals(request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()))
            	{
-           		// TODO add cookie token
+           		// Use a cookie to store the token (sessions are not meant to be used in a RESTful api)
+           		// Token cookie as an age of 1h (You won't even stay that much on the website with so few things to see)
+           		Utilities.setCookie(response, "token", token, 3600);
+           		
+           		// Just adding username to the request to display it on the website
+           		// Consumes more than needed but we wanted a pimped websitew
+           		String username = playerDao.read(token).getUsername();
+            	request.setAttribute("username", username);
+            	// Add the username to a cookie to use it later
+            	Utilities.setCookie(response, "username", username, 3600);
+           		
            		this.getServletContext().getRequestDispatcher( VUE_SUCCESS ).forward( request, response ); 
            	}
            	else

@@ -27,6 +27,7 @@ public class PlayerDAOImpl implements PlayerDAO {
 	
 	private static final String SQL_CREATE_PLAYER = "INSERT INTO Player (email, password, pseudo, token) VALUES (?, ?, ?, ?)";
 
+	private static final String SQL_UPDATE_PLAYER = "UPDATE Player SET password=? WHERE token=?";
 	
 	private static final String SELECT_COUNT_EMAIL = "SELECT COUNT(email) FROM Player WHERE email = ?";
 	
@@ -34,7 +35,7 @@ public class PlayerDAOImpl implements PlayerDAO {
 	
 	private static final String SQL_UPDATE_PLAYER_TOKEN = "UPDATE Player SET token=? WHERE email=?";
 	
-	private static final String SQL_DELETE_PLAYER = "DELETE FROM Player WHERE email=?";
+	private static final String SQL_DELETE_PLAYER = "DELETE FROM Player WHERE token=?";
 	
 	// -----------------------------
 	
@@ -157,6 +158,30 @@ public class PlayerDAOImpl implements PlayerDAO {
 	    }
 		
 	}
+	
+	// For now we can only change the password
+	@Override
+	public void update(User player) throws DAOException {
+		Connection connection = null;
+	    PreparedStatement preparedStatement = null;
+	    ResultSet incrementalId = null;
+
+	    try {
+	        /* Récupération d'une connexion depuis la Factory */
+	    	connection = daoFactory.getConnection();
+	        preparedStatement = initialisationRequetePreparee(connection, SQL_UPDATE_PLAYER, true, player.getPassword(), player.getToken());
+	        int statut = preparedStatement.executeUpdate();
+	        /* Analyse du statut retourné par la requête d'insertion */
+	        if (statut == 0) {
+	            throw new DAOException("Échec de mise à jour du token, aucune modification effectuée.");
+	        }
+	    } catch (SQLException e) {
+	        throw new DAOException(e);
+	    } finally {
+	        closeAll(incrementalId, preparedStatement, connection);
+	    }
+		
+	}
 
 	@Override
 	public void delete(User player) throws DAOException {
@@ -167,7 +192,7 @@ public class PlayerDAOImpl implements PlayerDAO {
 	    try {
 	        /* Récupération d'une connexion depuis la Factory */
 	    	connection = daoFactory.getConnection();
-	        preparedStatement = initialisationRequetePreparee(connection, SQL_DELETE_PLAYER, true, player.getEmail());
+	        preparedStatement = initialisationRequetePreparee(connection, SQL_DELETE_PLAYER, true, player.getToken());
 	        int statut = preparedStatement.executeUpdate();
 	        /* Analyse du statut retourné par la requête d'insertion */
 	        if (statut == 0) {

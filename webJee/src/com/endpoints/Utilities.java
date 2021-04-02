@@ -7,7 +7,9 @@ import java.io.InputStreamReader;
 import java.security.SecureRandom;
 import java.util.Base64;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.bean.Game;
 import com.bean.User;
@@ -38,5 +40,23 @@ public class Utilities {
 	    secureRandom.nextBytes(randomBytes);
 	    return base64Encoder.encodeToString(randomBytes);
 	}
+	
+	public static void setCookie( HttpServletResponse response, String nom, String valeur, int maxAge ) {
+	    Cookie cookie = new Cookie( nom, valeur );
+	    cookie.setMaxAge( maxAge );
+	    response.addCookie( cookie );
+	}
+	
+	public static String getCookieValue( HttpServletRequest request, String nom ) {
+        Cookie[] cookies = request.getCookies();
+        if ( cookies != null ) {
+            for ( Cookie cookie : cookies ) {
+                if ( cookie != null && nom.equals( cookie.getName() ) ) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
+    }
 
 }
