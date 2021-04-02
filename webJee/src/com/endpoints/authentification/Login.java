@@ -47,6 +47,7 @@ public class Login extends HttpServlet {
 
     public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {	
     	/* Préparation de l'objet formulaire */
+    	System.out.println("requete login en approche ");
         ConnexionForm form = new ConnexionForm();
         
         String email;
@@ -54,8 +55,10 @@ public class Login extends HttpServlet {
         
         if(request.getParameter("email") != null)
         {
-        	email = request.getParameter("email");
-        	password = request.getParameter("motdepasse");
+        	System.out.println("requete app approche ");
+        	email = request.getParameter("email").toString();
+        	password = request.getParameter("motdepasse").toString();
+        	System.out.println("email : " + email +" | password : "+ password);
         }
         else
         {
@@ -98,7 +101,7 @@ public class Login extends HttpServlet {
            	}
            	else
            	{
-           		request.setAttribute("token","{\"token\":\""+token+"\"}");
+           		request.setAttribute("token","{\"token\":"+token+"}");
            		this.getServletContext().getRequestDispatcher( VUE_SUCCESS_JSON ).forward( request, response ); 
            	}
          }
