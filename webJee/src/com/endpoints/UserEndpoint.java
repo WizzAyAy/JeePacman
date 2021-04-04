@@ -36,6 +36,10 @@ public class UserEndpoint extends HttpServlet  {
 	public void doGet( HttpServletRequest request, HttpServletResponse response )	throws ServletException, IOException {
 		
 		String token = Utilities.getCookieValue(request, "token");
+		if(token == null)
+		{
+			token = request.getHeader("token");
+		}
 		if(token != null && request.getParameter("info")==null) {		
 			User player = playerDao.read(token);
 			String json = new Gson().toJson(player);
@@ -64,6 +68,7 @@ public class UserEndpoint extends HttpServlet  {
 			}
 			else
 			{
+				response.setStatus(200); // OK;
 				JsonArray cosArray = elmt.getAsJsonArray();
 				request.setAttribute("cosmetics", cosArray);
 			}
