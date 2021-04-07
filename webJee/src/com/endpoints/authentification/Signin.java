@@ -65,6 +65,10 @@ public class Signin extends HttpServlet {
         	user.setToken(token);
         	playerDao.create(user);
         	
+        	// Use a cookie to store the token (sessions are not meant to be used in a RESTful api)
+       		// Token cookie as an age of 1h (You won't even stay that much on the website with so few things to see)
+       		Utilities.setCookie(response, "token", token, 3600);
+        	
         	// Just adding username to the request to display it on the website
         	request.setAttribute("username", username);
         	// Add the username to a cookie to use it later
